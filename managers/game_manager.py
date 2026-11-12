@@ -1,0 +1,65 @@
+"""Application loop and game-state coordinator."""
+
+import pygame
+
+from config import FPS, BACKGROUND_COLOR
+from states.menu_state import MenuState
+
+
+class GameManager:
+    def __init__(self, screen):
+        self._screen = screen
+        self._clock = pygame.time.Clock()
+        self._running = True
+        self._current_state = MenuState(self)
+        self._current_state.enter()
+
+    def change_state(self, new_state): #Switches the game from one state to another
+        if self._current_state is not None:
+            self._current_state.exit()
+        self._current_state = new_state
+        self._current_state.enter()
+
+    def run(self):
+        """Run the main event, update and draw loop."""
+        while self._running:
+            dt = self._clock.tick(FPS) / 1000.0
+            events = pygame.event.get()
+
+            self.handle_events(events)
+            if not self._running:
+                break
+            self.update(dt)
+            self.draw()
+
+        self.quit()
+
+    def handle_events(self, events): #process user's input and window events
+        for event in events:
+            if event.type == pygame.QUIT:
+                self._running = False
+                return
+        if self._current_state is not None:
+            self._current_state.handle_events(events)       #forwards all events to the active state; each will do its respective handle_events
+
+    def update(self, dt): #updates game logic and objects
+        if self._current_state is not None:
+            self._current_state.update(dt)
+
+    def draw(self): #display everything on screen
+        self._screen.fill(BACKGROUND_COLOR)
+        if self._current_state is not None:
+            self._current_state.draw(self._screen)
+            
+        pygame.display.flip()
+
+    def quit(self):
+        """Clean up states and shut down pygame safely."""
+        if self._current_state is not None:
+            self._current_state.exit()
+            self._current_state = None
+        
+        self._running = False 
+        pygame.quit()
+        
+        
