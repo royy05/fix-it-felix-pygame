@@ -9,8 +9,7 @@ import math
 from entities.game_object import GameObject
 from entities.brick import Brick
 from config import (
-    BRICK_WIDTH,
-    BRICK_HEIGHT,
+    BRICK_SIZE,
     TOTAL_FLOORS,
     WINDOWS_PER_FLOOR,
     MIN_BROKEN_WINDOWS,
@@ -179,7 +178,13 @@ class Ralph(GameObject):
 
     def drop_debris(self):
         """Create and return a new Brick object."""
-        pass
+        brick_width, brick_height = BRICK_SIZE
+        brick = Brick(self._x,
+                      self._y,
+                      brick_width,
+                      brick_height,
+                      self._debris_speed)
+        return brick
 
     def update(self, dt):
         """Update Ralph according to his current state."""
