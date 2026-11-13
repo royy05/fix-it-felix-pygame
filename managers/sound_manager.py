@@ -9,6 +9,9 @@ class SoundManager:
         self._music_volume = 1.0
         self._sound_volume = 1.0
 
+    def handle_event(self,event):
+        pass
+
     def load_sounds(self):
         pass
 
