@@ -3,7 +3,7 @@
 import pygame
 
 from entities.game_object import GameObject
-
+from config import SCREEN_HEIGHT
 
 class Brick(GameObject):
     def __init__(self, x, y, width, height, fall_speed):
@@ -12,14 +12,39 @@ class Brick(GameObject):
         self._is_active = True
         self._has_hit_player = False
 
+
     def fall(self, dt):
-        pass
+        self._y += self._fall_speed * dt
 
     def check_collision(self, player):
-        pass
+        if (self.get_rect().colliderect(player.get_rect())
+                and not self._has_hit_player):
+
+            if player.take_damage():
+                self._has_hit_player = True
 
     def update(self, dt):
-        pass
+        self.fall(dt)
+
+        if self._y + self._height > SCREEN_HEIGHT:
+            self._is_active = False
 
     def draw(self, screen):
-        pass
+        if self._is_active:
+            pygame.draw.rect(
+                screen,
+                (150, 60, 40),
+                (
+                    self._x,
+                    self._y,
+                    self._width,
+                    self._height
+                )
+            )
+
+
+
+
+
+
+   
