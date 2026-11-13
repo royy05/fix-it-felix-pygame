@@ -93,7 +93,7 @@ Completed the basic climbing movement and target-arrival logic.
 
 **Tests/validation performed:**
 - Reviewed the state assignment and timer resets.
-- Integration testing with PlayingState is pending.
+- Completed the introduction-ending method, including Ralph's transition and positioning on the rooftop.
 
 **Final result:**
 Completed the initial introduction-ending method. Rooftop positioning remains pending.
@@ -190,3 +190,139 @@ Identified configuration compatibility requirements and agreed on the updated na
 
 **Final result:**
 Successfully configured a personal development branch for independent coding and collaboration.
+
+---
+
+## Entry 7: Ralph Rooftop Patrol Movement
+
+**Date:** 14 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Task:** Implementing Ralph's rooftop positioning and continuous patrol movement.
+
+**Prompt Used:**  
+"Help me implement Ralph's rooftop movement. He should finish his introduction, move onto the roof, patrol horizontally, and reverse direction when reaching either edge."
+
+**AI-generated suggestions or code received:**
+- Explained how to use Building's existing roof properties instead of recalculating roof dimensions in Ralph.
+- Suggested positioning Ralph at the left edge of the roof after the introduction.
+- Explained how to calculate Ralph's vertical position using the roof's top coordinate and his height.
+- Suggested using a direction variable to control horizontal movement.
+- Explained how to clamp Ralph's position and reverse direction at the rooftop boundaries.
+
+**Student changes and reasoning:**
+- Implemented `finish_intro(building)` to position Ralph on the rooftop.
+- Changed Ralph's state to `MOVING` after finishing the introduction.
+- Reset the movement and attack timers.
+- Implemented `move_rooftop(dt, building)` using the roof properties provided by Building.
+- Used boundary checks to prevent Ralph from moving outside the rooftop.
+
+**Tests/validation performed:**
+- Reviewed the rooftop positioning calculations.
+- Checked the left and right boundary conditions manually.
+- Runtime testing is pending.
+
+**Final result:**
+Completed Ralph's rooftop positioning and horizontal patrol movement, including direction reversal at both boundaries.
+
+---
+
+## Entry 8: Implementing Ralph's Attack Cycle and Difficulty-Based Timing
+
+**Date:** 14 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Task:** Implementing Ralph's repeated attack cycle and connecting attack timing to difficulty settings.
+
+**Prompt Used:**  
+"Help me implement Ralph's attack cycle. He should move for a configured interval, stop to attack, pause for 0.8 seconds, and then resume moving. Explain how to use separate timers for movement and attacking."
+
+**AI-generated suggestions or code received:**
+- Explained the difference between `_move_timer` and `_attack_timer`.
+- Suggested using `_move_interval` to determine how long Ralph moves before attacking.
+- Suggested using `_attack_duration` to control the length of the attacking phase.
+- Explained how to use `_attack_performed` to prevent multiple attacks during the same attacking phase.
+- Recommended resetting the timers when transitioning between states.
+- Explained how PlayingState could supply different movement intervals and debris speeds according to difficulty.
+
+**Student changes and reasoning:**
+- Implemented separate movement and attack timers.
+- Used `_move_timer` to track Ralph's movement duration.
+- Used `_attack_timer` to track the attacking duration.
+- Set `_attack_duration` to 0.8 seconds.
+- Implemented transitions between `MOVING` and `ATTACKING` inside `update()`.
+- Implemented `set_attack_parameters()` to receive the spawn interval and debris speed from PlayingState.
+- Assigned the spawn interval to `_move_interval` and the falling speed to `_debris_speed`.
+- Removed the unnecessary `_attack_interval` attribute because `_move_interval` already handled the required timing.
+
+**Tests/validation performed:**
+- Reviewed the timer calculations and state transitions manually.
+- Checked that the attack flag and timers reset after each attack.
+- Runtime testing with the difficulty system is pending.
+
+**Final result:**
+Implemented Ralph's repeated movement and attack cycle, allowing his attack frequency and debris speed to change according to the game's difficulty.
+
+---
+
+## Entry 9: Implementing Random Brick Generation and Returning Bricks
+
+**Date:** 14 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Task:** Implementing Ralph's attack method and allowing newly generated Brick objects to be received by PlayingState.
+
+**Prompt Used:**  
+"Help me implement Ralph's attack method so that each attack creates one to three random bricks. Also, how should Ralph return these Brick objects to PlayingState?"
+
+**AI-generated suggestions or code received:**
+- Suggested using `random.randint(1, 3)` to determine the number of bricks per attack.
+- Explained how to reuse the existing `drop_debris()` method to create individual Brick objects.
+- Suggested storing the newly created bricks in a list.
+- Explained how to initialize an empty list in `update()` and return it after processing Ralph's current state.
+- Recommended returning an empty list during frames when Ralph does not generate any bricks.
+
+**Student changes and reasoning:**
+- Implemented `attack()` to generate a random number of bricks between one and three.
+- Reused `drop_debris()` to construct each Brick object.
+- Modified `update()` to initialize `new_bricks` as an empty list.
+- Assigned the result of `self.attack()` to `new_bricks` when an attack occurs.
+- Added `return new_bricks` outside the state conditions so PlayingState can receive the generated objects.
+- Kept `_attack_performed` to ensure bricks are generated only once per attack.
+
+**Tests/validation performed:**
+- Reviewed the random brick generation logic.
+- Checked that `update()` returns a list regardless of Ralph's current state.
+- Integration and runtime testing with PlayingState are pending.
+
+**Final result:**
+Completed Ralph's random brick generation and return mechanism. Newly created Brick objects can now be passed to PlayingState for management.
+
+---
+
+## Entry 10: Planning Ralph and Entity Integration with PlayingState
+
+**Date:** 14 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Task:** Reviewing the PlayingState structure and planning the integration of Ralph, Building, Player and Brick objects.
+
+**Prompt Used:**  
+"Review my PlayingState skeleton and explain how it should coordinate Ralph, Building, Player and falling debris. Help me decide the correct implementation order without changing the agreed method names."
+
+**AI-generated suggestions or code received:**
+- Explained the responsibilities of the existing PlayingState methods.
+- Suggested initializing fresh gameplay objects and resetting variables inside `enter()`.
+- Explained the distinction between `_entities` for the main game objects and `_debris` for falling Brick objects.
+- Explained how PlayingState should receive newly generated bricks from Ralph's `update()` method.
+- Warned against updating Ralph more than once per frame because this would affect his movement and attack timing.
+- Recommended implementing `enter()` first, followed by debris integration, entity updates and collision handling.
+
+**Student changes and reasoning:**
+- Reviewed the responsibilities of the existing PlayingState methods.
+- Decided to retain the existing class structure and method names.
+- Planned to keep the main game objects separate from the falling debris collection.
+- Decided to implement PlayingState incrementally, starting with object initialization.
+
+**Tests/validation performed:**
+- Reviewed the PlayingState skeleton and its dependencies.
+- Actual implementation and integration testing are pending.
+
+**Final result:**
+Established an implementation sequence for integrating Ralph's completed core logic into PlayingState while maintaining the agreed project architecture.
