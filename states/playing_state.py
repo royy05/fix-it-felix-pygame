@@ -1,6 +1,7 @@
 """Active gameplay state and gameplay coordinator."""
 
 import pygame
+import math
 
 from config import (
     INTRO_DELAY,
@@ -13,6 +14,11 @@ from config import (
     EASY_SPAWN_INTERVAL,
     MEDIUM_SPAWN_INTERVAL,
     HARD_SPAWN_INTERVAL,
+    FELIX_SIZE,
+    RALPH_SIZE,
+    PLAY_AREA,
+    GROUND_Y,
+    FIX_RANGE
 )
 from states.game_state import GameState
 from entities.building import Building
@@ -39,19 +45,95 @@ class PlayingState(GameState):
         """Initialize or reset the gameplay environment whenever PlayingState becomes active."""
         #in order to prevent previous playing state's objects (before restarting) still active after restart,
         #we decided to initialize here. so all objects will be new when the PlayingState is active again.
-        pass
+        #create a fresh building
+        self._building = Building()
+        
+        #create felix
+        felix_width, felix_height = FELIX_SIZE
+        felix_x = PLAY_AREA[0] + 10
+        felix_y = GROUND_Y - felix_height
+        self._player = Player(
+            felix_x,
+            felix_y,
+            felix_width, 
+            felix_height
+        )
+        
+        #create Ralph
+        ralph_width, ralph_height = RALPH_SIZE
+        ralph_x = self._building.roof_left
+        ralph_y = self._building.roof_y - ralph_height
+        
+        self._ralph = Ralph(
+            ralph_x,
+            ralph_y,
+            ralph_width,
+            ralph_height,
+            self._building
+        )
+        self._ralph.start_intro()
+        # Initialize object collections
+        self._debris = []
 
+        self._entities = [
+            self._building,
+            self._player,
+            self._ralph
+        ]
+        
+        # Reset gameplay timers
+        self._intro_timer = 0.0
+        self._game_started = False
+        self._elapsed_time = 0.0
+        self._remaining_time = GAME_DURATION
+        
+        self.update_difficulty()
+        
     def handle_events(self, events):
         """Handle movement and SPACE repair input."""
-        pass
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    window = self._find_repair_target()
+                    
+                    if window is not None:
+                        self._player.repair_window(window)
 
     def update(self, dt):
         """Update introduction, timer, difficulty and game objects."""
-        pass
 
+        #Update Building and Player
+        self.update_entity_collection(dt)
+
+        #Update Ralph and collect new bricks
+        self.spawn_debris(dt)
+
+        #Update falling bricks
+        for brick in self._debris:
+            brick.update(dt)
+
+        #Check whether the introduction has finished so the actual
+        # 90 secs game can begin
+        if not self._game_started and not self._ralph.is_climbing:
+            self._game_started = True
+
+        #Update gameplay timer and difficulty
+        if self._game_started:
+            self._elapsed_time += dt
+            self._remaining_time = max(0, GAME_DURATION - self._elapsed_time)
+            self.update_difficulty()
+
+        #Handle collisions
+        self.handle_collisions()
+
+        #Check game-ending conditions
+        self.check_win_condition()
+        self.check_lose_condition()
+        
     def draw(self, screen):
         """Draw building, entities and gameplay HUD."""
-        pass
+        self._draw_entity_collection(screen)
+        self._draw_debris(screen)
 
     def exit(self):
         pass
@@ -70,13 +152,14 @@ class PlayingState(GameState):
             
         self._ralph.set_attack_parameters(spawn_interval, debris_speed)
 
-    def spawn_debris(self, dt):
-        """Ask Ralph to create debris and add it to the active collection."""
-        pass
-
+    def spawn_debris(self,dt):
+        """Add Ralph's newly created bricks to _debris."""
+        new_bricks = self._ralph.update(dt)
+        self._debris.extend(new_bricks)
+        
     def handle_collisions(self):
         """Check debris/player collisions and remove inactive debris."""
-        pass
+        
 
     def check_win_condition(self):
         if self._building.all_windows_repaired() and self._player.lives >=1:
@@ -90,13 +173,49 @@ class PlayingState(GameState):
 
     def _find_repair_target(self):
         """Return the eligible nearby broken window, if any."""
-        pass
+       
+        nearest_window = None
+        nearest_distance = FIX_RANGE
 
-    def _update_entity_collection(self, dt):
-        """Demonstrate polymorphic update dispatch."""
-        pass
+        # Calculate the centre of Felix
+        player_center_x = self._player.x + self._player.width / 2
+        player_center_y = self._player.y + self._player.height / 2
+        
+        # Check every window in the building
+        for window in self._building.windows:
+
+            # Ignore windows that are not broken
+            if not window.is_broken:
+                continue
+
+            # Calculate the centre of the window
+            window_center_x = window.x + window.width / 2
+            window_center_y = window.y + window.height / 2
+
+            # Calculate distance between Felix and the window
+            distance = math.hypot(
+                window_center_x - player_center_x,
+                window_center_y - player_center_y
+            )
+
+            # Keep the nearest window within repair range
+            if distance <= FIX_RANGE and distance < nearest_distance:
+                nearest_distance = distance 
+                nearest_window = window
+
+        return nearest_window
+
+    def update_entity_collection(self, dt):
+        for entity in self._entities:
+            if entity is not self._ralph: #avoid updating Ralph twice
+                entity.update(dt)
     
     def _draw_entity_collection(self, screen):
         """Demonstrate polymorphic draw dispatch."""
         for entity in self._entities:
             entity.draw(screen)
+
+    def _draw_debris(self, screen):
+        """Draw all falling bricks."""
+        for brick in self._debris:
+            brick.draw(screen)

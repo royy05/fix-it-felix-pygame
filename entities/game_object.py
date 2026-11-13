@@ -1,17 +1,19 @@
 """Abstract base class for physical game objects."""
+# parent class -- position, width n height, get_rect(), common obj functionalities
+# player - ralph - window - brick
 
 from abc import ABC, abstractmethod
 import pygame
 
-
 class GameObject(ABC):
-    def __init__(self, x, y, width, height, image=None):
+    def __init__(self, x, y, width, height):
         self._x = x
         self._y = y
         self._width = width
         self._height = height
-        self._image = image
 
+    # every class inheriting gameobject must have these two methods:
+    # update and draw
     @abstractmethod
     def update(self, dt):
         """Update this object's state."""
@@ -24,7 +26,9 @@ class GameObject(ABC):
 
     def get_rect(self):
         """Return this object's collision rectangle."""
-        pass
+        return pygame.Rect(self._x, self._y, self._width, self._height)
+        # rectangle representing object position and size
+        # for felix and brick collision - damage taken
 
     @property
     def x(self):
