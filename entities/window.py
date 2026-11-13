@@ -1,23 +1,22 @@
-"""Individual building window and its repair state."""\
+"""Individual building window and its repair state."""
 
 import pygame
 
 from entities.game_object import GameObject
 from config import (
-    REPAIRS_REQUIRED,
-    WINDOW_SIZE
+    REPAIRS_REQUIRED
 )
 
 
 class Window(GameObject):  # inherits from GameObject
-    def init(self, x, y, width, height, floor_number, window_number,
+    def __init__(self, x, y, width, height, floor_number, window_number,
                  is_broken=False):
-        super().init(x, y, width, height)
+        super().__init__(x, y, width, height)
         self._floor_number = floor_number
         self._window_number = window_number
         self._is_broken = is_broken
         self._repair_progress = 0
-        self._required_repairs = 3
+        self._required_repairs = REPAIRS_REQUIRED
         
         # loading images from assets
         self._fixed_image = pygame.image.load(
@@ -108,4 +107,4 @@ class Window(GameObject):  # inherits from GameObject
         else:
             screen.blit(self._fixed_image, (self.x, self.y))
             
-# self.x , self.y position attributes were able to use cuz of inheritance from Gameobject
+# self.x , self.y position attributes were able to use cuz of inheritance from gameobject
