@@ -2,7 +2,7 @@
 
 import pygame
 
-from config import TOTAL_LIVES, PLAYER_INVULNERABILITY_TIME
+from config import MAX_LIVES, PLAYER_INVULNERABILITY_TIME
 from entities.game_object import GameObject
 
 
@@ -10,7 +10,7 @@ class Player(GameObject):
     def __init__(self, x, y, width, height, image=None):
         super().__init__(x, y, width, height, image)
         self._speed = 0.0
-        self._lives = TOTAL_LIVES
+        self._lives = MAX_LIVES
         self._invulnerability_timer = 0.0
         self._is_invulnerable = False
 
@@ -20,7 +20,10 @@ class Player(GameObject):
 
     @lives.setter
     def lives(self, value):
-        pass
+        if value < 0:
+            raise ValueError("Lives cannot be negative")
+
+        self._lives = value
 
     def move(self, direction, dt):
         pass
