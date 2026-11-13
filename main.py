@@ -2,7 +2,7 @@
 
 import pygame
 
-from config import SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, FPS
+from config import SCREEN_WIDTH, SCREEN_HEIGHT, TITLE, FPS
 from managers.game_manager import GameManager
 
 
@@ -10,7 +10,7 @@ def main():
     """Initialize Pygame and start the game manager."""
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption(WINDOW_TITLE)
+    pygame.display.set_caption(TITLE)
 
     game_manager = GameManager(screen)
     game_manager.run()
