@@ -11,9 +11,7 @@ from entities.brick import Brick
 from config import (
     BRICK_SIZE,
     TOTAL_FLOORS,
-    WINDOWS_PER_FLOOR,
-    MIN_BROKEN_WINDOWS,
-    MAX_BROKEN_WINDOWS,
+    WINDOWS_PER_FLOOR
 )
 
 
@@ -53,11 +51,13 @@ class Ralph(GameObject):
         # Rooftop movement
         self._move_timer = 0.0
         self._move_interval = 0.0
-
+        
         # Attacking
         self._attack_timer = 0.0
-        self._attack_interval = 2.5
         self._debris_speed = 120.0
+        self._attack_duration = 0.8
+        
+        self._attack_performed = False #brick hasn't been dropped
         
         self._current_window_index = 0 #tracks which window Ralph is currently visiting
         
@@ -68,6 +68,10 @@ class Ralph(GameObject):
         #resetting for new game
         self._state = RalphState.CLIMBING
         self._climb_timer = 0.0
+        self._attack_timer = 0.0
+        self._move_timer = 0.0
+        self._attack_performed = False
+        
         self._current_window_index = 0
         self._broken_windows.clear()
         self._windows_to_destroy.clear()
@@ -156,24 +160,53 @@ class Ralph(GameObject):
         building.break_window(floor_number, window_number)
         self._broken_windows.add((floor_number, window_number))
 
-    def finish_intro(self):
+    
+    
+    def finish_intro(self, building):
         """Finish the introduction and prepare rooftop gameplay."""
-        self._state = RalphState.INTRO_FINISHED
+    
         self._move_timer = 0.0
         self._attack_timer = 0.0
-        #to be continued after building is finished
+        
+        
+        self._x = building.roof_left
+        self._y = building.roof_y - self._height
 
-    def move_rooftop(self, dt):
+        self._state = RalphState.MOVING
+        self._direction = 1
+        self._attack_performed = False
+        
+    def move_rooftop(self, dt, building):
         """Move Ralph horizontally between rooftop positions."""
-        pass
+
+        left_limit = building.roof_left
+        right_limit = building.roof_right - self._width
+        
+        self._x += self._direction * dt * self._move_speed
+        if self._x >= right_limit:
+            self._x = right_limit
+            self._direction = -1
+            
+        elif self._x <= left_limit:
+            self._x = left_limit
+            self._direction = 1
+            
 
     def attack(self):
         """Create a random number of bricks during an attack."""
-        pass
-
+        brick_number = random.randint(1, 3)
+        brick_list = []
+        
+        for _ in range(brick_number):
+            brick = self.drop_debris()
+            brick_list.append(brick)
+            
+        return brick_list
+        
+            
     def set_attack_parameters(self, spawn_interval, debris_speed):
         """Receive current difficulty settings from PlayingState."""
-        self._attack_interval = spawn_interval
+        self._move_interval = spawn_interval
         self._debris_speed = debris_speed
 
     def drop_debris(self):
@@ -186,9 +219,41 @@ class Ralph(GameObject):
                       self._debris_speed)
         return brick
 
-    def update(self, dt):
+    def update(self, dt, building):
         """Update Ralph according to his current state."""
-        pass
+        new_bricks =[]
+        if self._state == RalphState.CLIMBING:
+            
+            self.climb(dt, building) #starting state is climbing
+            
+            if self._current_window_index == len(self._windows_to_destroy):
+                self.finish_intro(building)
+        
+        elif self._state == RalphState.MOVING:
+            self._move_timer += dt
+            
+            if self._move_timer < self._move_interval:
+                self.move_rooftop(dt, building)
+            else:
+                self._state = RalphState.ATTACKING
+                self._attack_timer = 0.0
+        
+        elif self._state == RalphState.ATTACKING:
+            self._attack_timer += dt
+            
+            if not self._attack_performed:
+                new_bricks = self.attack()
+                self._attack_performed = True
+                
+                
+            if self._attack_timer >= self._attack_duration:
+                self._state = RalphState.MOVING
+                self._move_timer = 0.0
+                self._attack_timer = 0.0
+                self._attack_performed = False
+                
+        return new_bricks
+                
 
     def draw(self, screen):
         """Draw Ralph."""
