@@ -71,26 +71,35 @@ class Window(GameObject):  # inherits from GameObject
             self._is_broken = True
             self._repair_progress = 0
 
+#ABOUT repair() and is_repaired()
+# repair ==> perform repair--> increase repair progress (pressing space 3 times) action
+# is_repaired ==> check result/ condition to tell other classes whether the window is repaired
+
     def repair(self):
         # if broken, increase repair progress. check repair progress == 3 then window is repaired.
         # if not broken, do noting.
-        if not self._is_broken:
-            return False
+        if self._is_broken == True:
+            self._repair_progress += 1
+            
+            if self._repair_progress >= self._required_repairs:
+                self._is_broken = False
+                return True  # repaired now
+            else:
+                return False # still broken
+            
+        else:
+            return False #window not broken in the first place, so repaired is false. No repairs needed.
         
-        self._repair_progress += 1
-        
-        if self._repair_progress >= self._required_repairs:
-            self._is_broken = False
-        
-        return not self._is_broken # tells whether a repair state is completed
-
     def is_repaired(self):
         """Check whether the window has been fully repaired."""
         # check if window is still broken and repair is complete
-        return(
-            not self._is_broken
-            and self._repair_progress >= self._required_repairs
-        )
+        if self._is_broken == False:
+            if self._repair_progress >= self._required_repairs:
+                return True
+            else:
+                return False
+        else:
+            return False
         
 
     def update(self, dt):
