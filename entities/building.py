@@ -1,4 +1,3 @@
-
 """Building layout, roof, window ownership and drawing."""
 
 import pygame
@@ -23,10 +22,11 @@ class Building:
 
         # Store all window objects.
         self._windows = []
-
-        # ----------------------------------
+        self._windows_to_repair = set()
+        
+        
         # BUILDING WALL
-        # ----------------------------------
+        
 
         self._building_image = pygame.image.load(
             "assets/images/objects/building_wall.png"
@@ -37,9 +37,9 @@ class Building:
             (BUILDING_RECT[2], BUILDING_RECT[3])
         )
 
-        # ----------------------------------
+        
         # ROOF
-        # ----------------------------------
+        
 
         self._roof_image = pygame.image.load(
             "assets/images/objects/roof.png"
@@ -68,15 +68,14 @@ class Building:
             roof_height
         )
 
-        # ----------------------------------
+        
         # CREATE WINDOWS
-        # ----------------------------------
+        
 
         self.create_windows()
-
-    # ======================================
+    
     # PROPERTIES
-    # ======================================
+    
 
     @property
     def windows(self):
@@ -114,9 +113,13 @@ class Building:
 
         return self._roof_rect.right
 
-    # ======================================
+    @property
+    def building_bottom(self):
+        """Return the bottom position of the building."""
+        return BUILDING_RECT[1] + BUILDING_RECT[3]
+    
     # WINDOW CREATION
-    # ======================================
+    
 
     def create_windows(self):
         """Create and position all windows in the building."""
@@ -171,9 +174,9 @@ class Building:
 
                 self._windows.append(window)
 
-    # ======================================
+    
     # WINDOW MANAGEMENT
-    # ======================================
+    
 
     def break_window(self, floor_number, window_number):
         """Find and break the requested window."""
@@ -188,7 +191,7 @@ class Building:
                 # Only break an intact window.
                 if not window.is_broken:
                     window.break_window()
-
+                    self._windows_to_repair.add((floor_number, window_number))
                 return
 
         raise ValueError(
@@ -208,11 +211,23 @@ class Building:
     def all_windows_repaired(self):
         """Check whether all broken windows have been repaired."""
 
-        return not self.get_broken_windows()
+        return (
+            len(self._windows_to_repair) > 0
+            and self.get_repaired_count() == len(self._windows_to_repair)
+        )
 
-    # ======================================
+    def get_repaired_count(self):
+        """Return the number of windows Felix has fully repaired."""
+        total_repaired = 0
+        for window in self._windows:
+            window_id = (window.floor_number, window.window_number)
+            if window_id in self._windows_to_repair and window.is_repaired():
+                total_repaired += 1
+        return total_repaired
+    
+    
     # UPDATE AND DRAW
-    # ======================================
+    
 
     def update(self, dt):
         """Update all window objects."""
