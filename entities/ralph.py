@@ -57,6 +57,22 @@ class Ralph(GameObject):
         
         self._current_window_index = 0 #tracks which window Ralph is currently visiting
         self._sorted_windows_to_destroy = []
+        
+        # Load images
+        self._idle_image = pygame.image.load("assets/characters/ralph/ralph_idle.png").convert_alpha()
+        self._throw_image = pygame.image.load("assets/characters/ralph/ralph_throw.png").convert_alpha()
+
+        # Scale images
+        self._idle_image = pygame.transform.scale(
+            self._idle_image, (self._width, self._height)
+        )
+
+        self._throw_image = pygame.transform.scale(
+            self._throw_image, (self._width, self._height)
+        )
+
+        # Current image show as idle
+        self._image = self._idle_image
 
     @property
     def is_climbing(self):
@@ -217,6 +233,13 @@ class Ralph(GameObject):
 
     def update(self, dt):
         """Update Ralph according to his current state."""
+        
+        #state-based animation, switching between throw and idle
+        if self._state == RalphState.ATTACKING:
+            self._image = self._throw_image
+        else:
+            self._image = self._idle_image
+        
         new_bricks =[]
         if self._state == RalphState.CLIMBING:
             
@@ -241,7 +264,7 @@ class Ralph(GameObject):
                 new_bricks = self.attack()
                 self._attack_performed = True
                 
-                
+                 
             if self._attack_timer >= self._attack_duration:
                 self._state = RalphState.MOVING
                 self._move_timer = 0.0
@@ -252,5 +275,6 @@ class Ralph(GameObject):
                 
 
     def draw(self, screen):
-        """Draw Ralph."""
-        pass
+        screen.blit(self._image, (self._x, self._y))   # parameters => (source, destination)
+        
+        # note: (self.x, self.y) as destination so we can draw ralph at his position

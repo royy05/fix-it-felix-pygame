@@ -87,6 +87,7 @@ class PlayingState(GameState):
         self._remaining_time = GAME_DURATION
         
         self.update_difficulty()
+        self._game_manager._sound_manager.play_music("background")
         
     def handle_events(self, events):
         """Handle keyboard events for window repair."""
@@ -168,6 +169,7 @@ class PlayingState(GameState):
         self._ralph = None
         self._debris.clear()
         self._entities.clear()
+        self._game_manager._sound_manager.stop_music()
 
     def update_difficulty(self):
         """Choose debris speed and spawn interval from elapsed time."""

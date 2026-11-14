@@ -4,15 +4,22 @@ import pygame
 
 from config import FPS, BACKGROUND_COLOR
 from states.menu_state import MenuState
-
+from managers.sound_manager import SoundManager
 
 class GameManager:
     def __init__(self, screen):
+        
+        
         self._screen = screen
         self._clock = pygame.time.Clock()
         self._running = True
+        self._sound_manager = SoundManager()
         self._current_state = MenuState(self)
         self._current_state.enter()
+
+    @property
+    def current_state(self):
+      return self._current_state
 
     def change_state(self, new_state): #Switches the game from one state to another
         if self._current_state is not None:
@@ -39,6 +46,10 @@ class GameManager:
             if event.type == pygame.QUIT:
                 self._running = False
                 return
+
+            self._sound_manager.handle_event(event)
+
+            
         if self._current_state is not None:
             self._current_state.handle_events(events)       #forwards all events to the active state; each will do its respective handle_events
 
@@ -60,6 +71,7 @@ class GameManager:
             self._current_state = None
         
         self._running = False 
+        self._sound_manager.stop_music()
         pygame.quit()
         
         
