@@ -132,13 +132,6 @@ class Player(GameObject):
         
 
         
-    
-
-    
-
-
-        
-        
 
     def update(self, dt):
         if self._is_invulnerable:
