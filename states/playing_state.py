@@ -90,7 +90,9 @@ class PlayingState(GameState):
         self.update_difficulty()
         
     def handle_events(self, events):
-        """Handle movement and SPACE repair input."""
+        """Handle keyboard events for window repair."""
+        if not self._game_started:
+            return
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -98,7 +100,24 @@ class PlayingState(GameState):
                     
                     if window is not None:
                         self._player.repair_window(window)
-
+                        
+    def handle_player_movement(self, dt):
+        """Handle keyboard input and move Felix in one direction at a time."""
+        
+        keys = pygame.key.get_pressed()
+        
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            self._player.move("left", dt)
+        
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            self._player.move("right", dt)
+        
+        elif keys[pygame.K_UP] or keys[pygame.K_w]:
+            self._player.move("up", dt)
+        
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            self._player.move("down", dt)
+            
     def update(self, dt):
         """Update introduction, timer, difficulty and game objects."""
 
@@ -119,6 +138,8 @@ class PlayingState(GameState):
 
         #Update gameplay timer and difficulty
         if self._game_started:
+            
+            self.handle_player_movement(dt)
             self._elapsed_time += dt
             self._remaining_time = max(0, GAME_DURATION - self._elapsed_time)
             self.update_difficulty()
@@ -159,7 +180,9 @@ class PlayingState(GameState):
         
     def handle_collisions(self):
         """Check debris/player collisions and remove inactive debris."""
-        
+        for brick in self._debris:
+            brick.check_collision(self._player)
+        self._debris = [brick for brick in self._debris if brick.is_active]
 
     def check_win_condition(self):
         if self._building.all_windows_repaired() and self._player.lives >=1:
@@ -211,8 +234,11 @@ class PlayingState(GameState):
                 entity.update(dt)
     
     def _draw_entity_collection(self, screen):
-        """Demonstrate polymorphic draw dispatch."""
+        """Draw all entities while hiding Felix during the introduciton."""
+        
         for entity in self._entities:
+            if entity == self._player and not self._game_started:
+                continue
             entity.draw(screen)
 
     def _draw_debris(self, screen):

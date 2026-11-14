@@ -12,7 +12,10 @@ class Brick(GameObject):
         self._is_active = True
         self._has_hit_player = False
 
-
+    @property
+    def is_active(self):
+        return self._is_active
+    
     def fall(self, dt):
         self._y += self._fall_speed * dt
 

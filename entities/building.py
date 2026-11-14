@@ -114,6 +114,10 @@ class Building:
 
         return self._roof_rect.right
 
+    @property
+    def building_bottom(self):
+        """Return the bottom position of the building."""
+        return BUILDING_RECT[1] + BUILDING_RECT[3]
     # ======================================
     # WINDOW CREATION
     # ======================================

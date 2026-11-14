@@ -72,7 +72,7 @@ class Ralph(GameObject):
         self._attack_performed = False
         
         self._x = self._building.roof_left
-        self._y = self._building.roof_y - self._height
+        self._y = self._building.building_bottom - self._height #start from the bottom
         self._direction = 1
         
         self._current_window_index = 0
