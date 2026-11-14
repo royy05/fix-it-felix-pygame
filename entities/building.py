@@ -1,4 +1,3 @@
-
 """Building layout, roof, window ownership and drawing."""
 
 import pygame
@@ -25,9 +24,9 @@ class Building:
         self._windows = []
         self._windows_to_repair = set()
         
-        # ----------------------------------
+        
         # BUILDING WALL
-        # ----------------------------------
+        
 
         self._building_image = pygame.image.load(
             "assets/images/objects/building_wall.png"
@@ -38,9 +37,9 @@ class Building:
             (BUILDING_RECT[2], BUILDING_RECT[3])
         )
 
-        # ----------------------------------
+        
         # ROOF
-        # ----------------------------------
+        
 
         self._roof_image = pygame.image.load(
             "assets/images/objects/roof.png"
@@ -69,14 +68,14 @@ class Building:
             roof_height
         )
 
-        # ----------------------------------
+        
         # CREATE WINDOWS
-        # ----------------------------------
+        
 
         self.create_windows()
-    # ======================================
+    
     # PROPERTIES
-    # ======================================
+    
 
     @property
     def windows(self):
@@ -118,9 +117,9 @@ class Building:
     def building_bottom(self):
         """Return the bottom position of the building."""
         return BUILDING_RECT[1] + BUILDING_RECT[3]
-    # ======================================
+    
     # WINDOW CREATION
-    # ======================================
+    
 
     def create_windows(self):
         """Create and position all windows in the building."""
@@ -175,9 +174,9 @@ class Building:
 
                 self._windows.append(window)
 
-    # ======================================
+    
     # WINDOW MANAGEMENT
-    # ======================================
+    
 
     def break_window(self, floor_number, window_number):
         """Find and break the requested window."""
@@ -226,9 +225,9 @@ class Building:
                 total_repaired += 1
         return total_repaired
     
-    # ======================================
+    
     # UPDATE AND DRAW
-    # ======================================
+    
 
     def update(self, dt):
         """Update all window objects."""

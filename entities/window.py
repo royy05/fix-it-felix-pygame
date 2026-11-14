@@ -7,7 +7,6 @@ from config import (
     REPAIRS_REQUIRED
 )
 
-
 class Window(GameObject):  # inherits from GameObject
     def __init__(self, x, y, width, height, floor_number, window_number,
                  is_broken=False):
