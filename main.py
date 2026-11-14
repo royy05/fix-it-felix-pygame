@@ -15,8 +15,5 @@ def main():
     game_manager = GameManager(screen)
     game_manager.run()
 
-    pygame.quit()
-
-
 if __name__ == "__main__":
     main()
