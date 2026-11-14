@@ -9,6 +9,9 @@ from config import (
 )
 
 class Window(GameObject):  # inherits from GameObject
+    
+    _image_cache = {}
+    
     def __init__(self, x, y, width, height, floor_number, window_number,
                  is_broken=False):
         super().__init__(x, y, width, height)
@@ -18,40 +21,54 @@ class Window(GameObject):  # inherits from GameObject
         self._repair_progress = 0
         self._required_repairs = REPAIRS_REQUIRED
         
-        # loading images from assets
-        asset_path = os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "assets",
-            "images",
-            "windows"
+        # so window can retrieve the shared images
+        image_size = (width, height)
+        
+        if image_size not in Window._image_cache:
+            
+            # loading images from assets
+            asset_path = os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "assets",
+                "images",
+                "windows"
+            )
+
+            # Load window images
+            fixed_path = os.path.join(
+                asset_path, "window_fixed.png"
+            )
+
+            broken_path = os.path.join(
+                asset_path, "window_broken.png"
+            )
+
+            fixed_image = pygame.image.load(
+                fixed_path
+            ).convert_alpha()
+
+            broken_image = pygame.image.load(
+                broken_path
+            ).convert_alpha()
+
+            # Scale images to match the window dimensions
+            fixed_image = pygame.transform.scale(
+                fixed_image, image_size
+            )
+
+            broken_image = pygame.transform.scale(
+                broken_image, image_size
+            )
+            
+            Window._image_cache[image_size] = (
+                fixed_image, broken_image
+            )
+            
+        self._fixed_image, self._broken_image = (
+            Window._image_cache[image_size]
         )
-
-        # Load window images
-        fixed_path = os.path.join(
-            asset_path, "window_fixed.png"
-        )
-
-        broken_path = os.path.join(
-            asset_path, "window_broken.png"
-        )
-
-        self._fixed_image = pygame.image.load(
-            fixed_path
-        ).convert_alpha()
-
-        self._broken_image = pygame.image.load(
-            broken_path
-        ).convert_alpha()
-
-        # Scale images to match the window dimensions
-        self._fixed_image = pygame.transform.scale(
-            self._fixed_image, (width, height)
-        )
-
-        self._broken_image = pygame.transform.scale(
-            self._broken_image, (width, height)
-        )
+        
         
     # concept here :
     # encapsulation: each object controlling its own internal data and
