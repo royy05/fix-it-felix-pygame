@@ -64,9 +64,11 @@ class SoundManager:
 
     def play_music(self, name):
         if name == "background":
-            pygame.mixer.music.load("assets/audio/backgroundsound.mp3")
-            pygame.mixer.music.set_volume(self._music_volume)
-            pygame.mixer.music.play(-1)
+            if not pygame.mixer.music.get_busy():
+
+                pygame.mixer.music.load("assets/audio/backgroundsound.mp4")
+                pygame.mixer.music.set_volume(self._music_volume)
+                pygame.mixer.music.play(-1)
 
     def stop_music(self):
         pygame.mixer.music.stop()

@@ -88,6 +88,7 @@ class PlayingState(GameState):
         self._remaining_time = GAME_DURATION
         
         self.update_difficulty()
+        self._game_manager._sound_manager.play_music("background")
         
     def handle_events(self, events):
         """Handle movement and SPACE repair input."""
@@ -136,7 +137,7 @@ class PlayingState(GameState):
         self._draw_debris(screen)
 
     def exit(self):
-        pass
+        self._game_manager._sound_manager.stop_music()
 
     def update_difficulty(self):
         """Choose debris speed and spawn interval from elapsed time."""
