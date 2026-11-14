@@ -19,15 +19,15 @@ class Player(GameObject):
         self._repair_target = None
 
         self._idle_image = pygame.image.load(
-            "assets/characters/felix/felix_idle.png"
+            "assets/images/characters/felix/felix_idle.png"
         ).convert_alpha()
 
         self._fix_image = pygame.image.load(
-            "assets/characters/felix/felix_fix.png"
+            "assets/images/characters/felix/felix_fix.png"
         ).convert_alpha()
 
         self._hurt_image = pygame.image.load(
-            "assets/characters/felix/felix_hurt.png"
+            "assets/images/characters/felix/felix_hurt.png"
         ).convert_alpha()
 
         self._idle_image = pygame.transform.scale(

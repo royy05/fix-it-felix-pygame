@@ -14,7 +14,7 @@ class MenuState(GameState):
         asset_path = os.path.join(os.path.dirname(__file__), "..", "assets")
 
         background_path = os.path.join(
-            asset_path, "background", "background.png"
+            asset_path, "images", "background", "background.png"
         )
 
         self._background = pygame.image.load(
