@@ -23,7 +23,8 @@ class Building:
 
         # Store all window objects.
         self._windows = []
-
+        self._windows_to_repair = set()
+        
         # ----------------------------------
         # BUILDING WALL
         # ----------------------------------
@@ -73,7 +74,6 @@ class Building:
         # ----------------------------------
 
         self.create_windows()
-
     # ======================================
     # PROPERTIES
     # ======================================
@@ -192,7 +192,7 @@ class Building:
                 # Only break an intact window.
                 if not window.is_broken:
                     window.break_window()
-
+                    self._windows_to_repair.add((floor_number, window_number))
                 return
 
         raise ValueError(
@@ -212,8 +212,20 @@ class Building:
     def all_windows_repaired(self):
         """Check whether all broken windows have been repaired."""
 
-        return not self.get_broken_windows()
+        return (
+            len(self._windows_to_repair) > 0
+            and self.get_repaired_count() == len(self._windows_to_repair)
+        )
 
+    def get_repaired_count(self):
+        """Return the number of windows Felix has fully repaired."""
+        total_repaired = 0
+        for window in self._windows:
+            window_id = (window.floor_number, window.window_number)
+            if window_id in self._windows_to_repair and window.is_repaired():
+                total_repaired += 1
+        return total_repaired
+    
     # ======================================
     # UPDATE AND DRAW
     # ======================================
