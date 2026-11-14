@@ -4,7 +4,6 @@ import pygame
 import math
 
 from config import (
-    INTRO_DELAY,
     GAME_DURATION,
     EASY_END,
     MEDIUM_END,
@@ -36,11 +35,12 @@ class PlayingState(GameState):
         self._debris = []
         self._entities = []
 
-        self._intro_timer = 0.0
         self._game_started = False
         self._elapsed_time = 0.0
         self._remaining_time = GAME_DURATION
 
+        self._hud_font = pygame.font.Font(None, 32)
+        
     def enter(self):
         """Initialize or reset the gameplay environment whenever PlayingState becomes active."""
         #in order to prevent previous playing state's objects (before restarting) still active after restart,
@@ -82,7 +82,6 @@ class PlayingState(GameState):
         ]
         
         # Reset gameplay timers
-        self._intro_timer = 0.0
         self._game_started = False
         self._elapsed_time = 0.0
         self._remaining_time = GAME_DURATION
@@ -149,15 +148,26 @@ class PlayingState(GameState):
 
         #Check game-ending conditions
         self.check_win_condition()
-        self.check_lose_condition()
+        
+        #check whether the current state is still PlayingState
+        if self._game_manager.current_state is self: 
+            self.check_lose_condition()
         
     def draw(self, screen):
         """Draw building, entities and gameplay HUD."""
         self._draw_entity_collection(screen)
         self._draw_debris(screen)
 
+        if self._game_started:
+            self.draw_hud(screen) #will appear only after Felix becomes controllable
+            
     def exit(self):
-        pass
+        
+        self._building = None
+        self._player = None
+        self._ralph = None
+        self._debris.clear()
+        self._entities.clear()
 
     def update_difficulty(self):
         """Choose debris speed and spawn interval from elapsed time."""
@@ -198,7 +208,7 @@ class PlayingState(GameState):
         """Return the eligible nearby broken window, if any."""
        
         nearest_window = None
-        nearest_distance = FIX_RANGE
+        nearest_distance = float("inf")
 
         # Calculate the centre of Felix
         player_center_x = self._player.x + self._player.width / 2
@@ -245,3 +255,48 @@ class PlayingState(GameState):
         """Draw all falling bricks."""
         for brick in self._debris:
             brick.draw(screen)
+            
+    def draw_hud(self, screen):
+        """Display the timer, remaining lives and repair progress."""
+
+        # -------------------------------
+        # TIMER
+        # -------------------------------
+
+        minutes = int(self._remaining_time // 60)
+        seconds = int(self._remaining_time % 60)
+
+        timer_text = f"{minutes:02d}:{seconds:02d}"
+
+        timer_surface = self._hud_font.render(
+            timer_text, True, (255, 255, 255)
+        )
+
+        screen.blit(timer_surface, (20, 20))
+
+        # -------------------------------
+        # FELIX'S LIVES
+        # -------------------------------
+
+        lives_text = f"Lives: {self._player.lives}"
+
+        lives_surface = self._hud_font.render(
+            lives_text, True, (255, 255, 255)
+        )
+
+        screen.blit(lives_surface, (20, 60))
+
+        # -------------------------------
+        # REPAIR PROGRESS
+        # -------------------------------
+
+        repaired_count = self._building.get_repaired_count()
+        total_broken = self._building.get_total_windows_to_repair()
+
+        repair_text = f"Windows Repaired: {repaired_count}/{total_broken}"
+
+        repair_surface = self._hud_font.render(
+            repair_text, True, (255, 255, 255)
+        )
+
+        screen.blit(repair_surface, (20, 100))
