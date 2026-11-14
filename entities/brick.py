@@ -64,6 +64,7 @@ class Brick(GameObject):
 
             if player.take_damage():
                 self._has_hit_player = True
+                self._is_active = False #brick disappear if Felix and brick collide
 
                 pygame.event.post(
                     pygame.event.Event(PLAYER_DAMAGED)
