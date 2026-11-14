@@ -5,6 +5,7 @@ import os
 
 from entities.game_object import GameObject
 from config import SCREEN_HEIGHT
+from events import PLAYER_DAMAGED
 
 class Brick(GameObject):
     
@@ -63,6 +64,12 @@ class Brick(GameObject):
 
             if player.take_damage():
                 self._has_hit_player = True
+
+                pygame.event.post(
+                    pygame.event.Event(PLAYER_DAMAGED)
+                )
+
+            
 
     def update(self, dt):
         self.fall(dt)
