@@ -25,6 +25,7 @@ from entities.player import Player
 from entities.ralph import Ralph
 from states.win_state import WinState
 from states.lose_state import LoseState
+from events import GAME_WON, GAME_LOST
 
 class PlayingState(GameState):
     def __init__(self, game_manager):
@@ -147,6 +148,7 @@ class PlayingState(GameState):
         #Handle collisions
         self.handle_collisions()
 
+
         #Check game-ending conditions
         self.check_win_condition()
         
@@ -198,12 +200,18 @@ class PlayingState(GameState):
 
     def check_win_condition(self):
         if self._building.all_windows_repaired() and self._player.lives >=1:
+            pygame.event.post(
+                pygame.event.Event(GAME_WON)
+            )
             self._game_manager.change_state(WinState(self._game_manager))
 
     def check_lose_condition(self):
         if self._player.lives == 0 or (
             self._remaining_time <= 0 and not self._building.all_windows_repaired()
             ):
+            pygame.event.post(
+                pygame.event.Event(GAME_LOST)
+            )
             self._game_manager.change_state(LoseState(self._game_manager))
 
     def _find_repair_target(self):
