@@ -8,7 +8,7 @@ from entities.game_object import GameObject
 
 class Player(GameObject):
     def __init__(self, x, y, width, height, image=None):
-        super().__init__(x, y, width, height, image)
+        super().__init__(x, y, width, height) #push: remove image
         self._speed = FELIX_SPEED
         self._lives = MAX_LIVES
         self._invulnerability_timer = 0.0

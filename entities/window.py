@@ -1,6 +1,7 @@
 """Individual building window and its repair state."""
 
 import pygame
+import os
 
 from entities.game_object import GameObject
 from config import (
@@ -18,23 +19,38 @@ class Window(GameObject):  # inherits from GameObject
         self._required_repairs = REPAIRS_REQUIRED
         
         # loading images from assets
-        self._fixed_image = pygame.image.load(
-            "assets/images/windows/window_fixed.png"
-        ).convert_alpha()
-        
-        self._broken_image = pygame.image.load(
-            "assets/images/windows/window_broken.png"
-        ).convert_alpha()
-        
-        # scaling the images
-        self._fixed_image = pygame.transform.scale(
-            self._fixed_image,
-            (width, height)
+        asset_path = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "assets",
+            "images",
+            "windows"
         )
-        
+
+        # Load window images
+        fixed_path = os.path.join(
+            asset_path, "window_fixed.png"
+        )
+
+        broken_path = os.path.join(
+            asset_path, "window_broken.png"
+        )
+
+        self._fixed_image = pygame.image.load(
+            fixed_path
+        ).convert_alpha()
+
+        self._broken_image = pygame.image.load(
+            broken_path
+        ).convert_alpha()
+
+        # Scale images to match the window dimensions
+        self._fixed_image = pygame.transform.scale(
+            self._fixed_image, (width, height)
+        )
+
         self._broken_image = pygame.transform.scale(
-            self._broken_image,
-            (width, height)
+            self._broken_image, (width, height)
         )
         
     # concept here :

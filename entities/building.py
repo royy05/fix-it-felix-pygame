@@ -1,6 +1,7 @@
 """Building layout, roof, window ownership and drawing."""
 
 import pygame
+import os
 
 from config import (
     TOTAL_FLOORS,
@@ -26,23 +27,39 @@ class Building:
         
         
         # BUILDING WALL
-        
+        ASSET_PATH = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "assets",
+            "images"
+        )
+
+        building_path = os.path.join(
+            ASSET_PATH,
+            "objects",
+            "building_wall.png"
+        ) 
 
         self._building_image = pygame.image.load(
-            "assets/images/objects/building_wall.png"
+            building_path
         ).convert_alpha()
 
         self._building_image = pygame.transform.scale(
             self._building_image,
             (BUILDING_RECT[2], BUILDING_RECT[3])
-        )
+        )   
 
         
         # ROOF
         
+        roof_path = os.path.join(
+            ASSET_PATH,
+            "objects",
+            "roof.png"
+        )
 
         self._roof_image = pygame.image.load(
-            "assets/images/objects/roof.png"
+            roof_path
         ).convert_alpha()
 
         self._roof_image = pygame.transform.scale(
@@ -224,6 +241,11 @@ class Building:
             if window_id in self._windows_to_repair and window.is_repaired():
                 total_repaired += 1
         return total_repaired
+    
+    #push: to fix missing builiding method in playing_state.py line296 HUD
+    def get_total_windows_to_repair(self):
+        """Return the total number of windows Ralph has broken."""
+        return len(self._windows_to_repair)
     
     
     # UPDATE AND DRAW
