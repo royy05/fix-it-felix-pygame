@@ -326,3 +326,68 @@ Completed Ralph's random brick generation and return mechanism. Newly created Br
 
 **Final result:**
 Established an implementation sequence for integrating Ralph's completed core logic into PlayingState while maintaining the agreed project architecture.
+
+
+## Entry 11: Implementing Window Repair Tracking in Building
+
+**Date:** 15 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Topic:** OOP Encapsulation, Window State Management and Repair Tracking  
+**Task:** Implementing window repair tracking in Building to determine when Felix has repaired all windows broken by Ralph.
+
+**Prompt Used:**  
+"How should I implement get_repaired_count() and update all_windows_repaired() in my Building class so the game only considers windows that Ralph originally broke?"
+
+**AI-generated suggestions or code received:**
+- Suggested creating a set named `_windows_to_repair` to record the floor and window number of each window Ralph breaks.
+- Explained how to update `break_window()` to record newly broken windows.
+- Suggested implementing `get_repaired_count()` to count windows that Ralph originally broke and Felix has fully repaired.
+- Suggested updating `all_windows_repaired()` to compare the repaired count with the total number of recorded windows.
+- Explained why `get_broken_windows()` cannot be used to determine the original total because it only returns windows that are currently broken.
+- Suggested adding `get_total_windows_to_repair()` to provide the original number of windows requiring repair.
+
+**Student changes and reasoning:**
+- Added `_windows_to_repair` as a set in the `Building` constructor.
+- Updated `break_window()` to record each window Ralph breaks using `(floor_number, window_number)`.
+- Implemented `get_repaired_count()` using a loop to identify windows that have been fully repaired.
+- Updated `all_windows_repaired()` to check whether all recorded windows have been repaired.
+- Added `get_total_windows_to_repair()` so other classes can retrieve the original repair requirement without directly accessing Building's private attribute.
+- Kept `get_broken_windows()` unchanged because it identifies windows that are currently broken.
+
+**Tests/validation performed:**
+- Reviewed the implementation with AI and corrected the tuple-based window identification logic.
+- Checked the expected behaviour before Ralph breaks any windows, after windows are broken, after some repairs, and after all repairs are completed.
+- Actual runtime testing has not yet been performed.
+
+**Final result:**
+The Building class can now track the windows originally broken by Ralph, count the windows fully repaired by Felix, and determine when all required repairs are completed. This also provides the information needed for the win condition and gameplay HUD.
+
+
+## Entry 12: Implementing Gameplay HUD in PlayingState
+
+**Date:** 15 November 2026  
+**Team Member:** Member 3 – Lin Lat Eain  
+**Topic:** Pygame Text Rendering and HUD Implementation  
+**Task:** Implementing a basic HUD to display the remaining game time, Felix's lives and window repair progress.
+
+**Prompt Used:**  
+"Can you give me the code and explain how to implement a HUD inside PlayingState to display the timer, remaining lives and repaired-window count?"
+
+**AI-generated suggestions or code received:**
+- Suggested creating a reusable Pygame font using `pygame.font.Font()`.
+- Provided a `draw_hud()` method to display the timer, lives and repair progress.
+- Explained time formatting using division, modulo and formatted strings.
+- Recommended retrieving gameplay information from Player and Building rather than storing duplicate values in PlayingState.
+
+**Student changes and reasoning:**
+- Added `_hud_font` to initialize the HUD font.
+- Implemented `draw_hud()` to display the three gameplay indicators.
+- Added the HUD drawing call inside `draw()` so it appears after Felix becomes controllable.
+- Used Building's public methods to retrieve repair progress.
+
+**Tests/validation performed:**
+- Reviewed the HUD code and corrected a font variable naming mistake.
+- Runtime testing has not yet been performed.
+
+**Final result:**
+Implemented a basic gameplay HUD in PlayingState that displays the timer, Felix's remaining lives and window repair progress.
