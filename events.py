@@ -1,0 +1,8 @@
+import pygame
+
+PLAYER_DAMAGED = pygame.USEREVENT + 1
+WINDOW_REPAIRED = pygame.USEREVENT + 2
+BRICK_SPAWNED = pygame.USEREVENT + 3
+GAME_WON = pygame.USEREVENT + 4
+GAME_LOST = pygame.USEREVENT + 5
+
