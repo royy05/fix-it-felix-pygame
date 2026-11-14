@@ -2,8 +2,11 @@
 
 import pygame
 import math
+import os
 
 from config import (
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
     GAME_DURATION,
     EASY_END,
     MEDIUM_END,
@@ -47,6 +50,25 @@ class PlayingState(GameState):
         #in order to prevent previous playing state's objects (before restarting) still active after restart,
         #we decided to initialize here. so all objects will be new when the PlayingState is active again.
         #create a fresh building
+        
+        asset_path = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "assets",
+            "images",
+            "background",
+            "background.png"
+        )
+        
+        self._background = pygame.image.load(
+            asset_path
+        ).convert()
+        
+        self._background = pygame.transform.scale(
+            self._background,
+            (SCREEN_WIDTH, SCREEN_HEIGHT)
+        )
+        
         self._building = Building()
         
         #create felix
@@ -158,6 +180,9 @@ class PlayingState(GameState):
         
     def draw(self, screen):
         """Draw building, entities and gameplay HUD."""
+        
+        screen.blit(self._background, (0,0))
+        
         self._draw_entity_collection(screen)
         self._draw_debris(screen)
 

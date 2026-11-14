@@ -30,7 +30,7 @@ class Ralph(GameObject):
         self._state = RalphState.CLIMBING
 
         # Movement
-        self._move_speed = 100.0
+        self._move_speed = 200.0
         self._direction = 1
         self._target_x = x
         self._target_y = y
