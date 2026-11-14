@@ -59,8 +59,8 @@ class Ralph(GameObject):
         self._sorted_windows_to_destroy = []
         
         # Load images
-        self._idle_image = pygame.image.load("assets/characters/ralph/ralph_idle.png").convert_alpha()
-        self._throw_image = pygame.image.load("assets/characters/ralph/ralph_throw.png").convert_alpha()
+        self._idle_image = pygame.image.load("assets/images/characters/ralph/ralph_idle.png").convert_alpha()
+        self._throw_image = pygame.image.load("assets/images/characters/ralph/ralph_throw.png").convert_alpha()
 
         # Scale images
         self._idle_image = pygame.transform.scale(
