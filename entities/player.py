@@ -4,6 +4,7 @@ import pygame
 import math
 from config import MAX_LIVES, PLAYER_INVULNERABILITY_TIME, FELIX_SPEED, PLAY_AREA, FIX_RANGE, FIX_TIME
 from entities.game_object import GameObject
+from events import HAMMER_SWUNG
 
 
 class Player(GameObject):
@@ -14,9 +15,11 @@ class Player(GameObject):
         self._invulnerability_timer = 0.0
         self._is_invulnerable = False
 
-        self._repair_timer = 0.0
-        self._is_repairing = False
-        self._repair_target = None
+        self._show_repair_pose = False
+        self._repair_pose_timer = 0.0
+        self._repair_pose_duration = 0.25
+
+        
 
         self._idle_image = pygame.image.load(
             "assets/characters/felix/felix_idle.png"
@@ -96,11 +99,9 @@ class Player(GameObject):
         return True
 
     def repair_window(self, window):
-        if self._is_repairing:
-            return
 
         if not window.is_broken:
-            return
+            return False
 
         player_center_x = self._x + self._width / 2
         player_center_y = self._y + self._height / 2
@@ -115,13 +116,25 @@ class Player(GameObject):
         )
 
         if distance > FIX_RANGE:
-            return
+            return False
 
        
 
-        self._repair_timer = FIX_TIME
-        self._is_repairing = True
-        self._repair_target = window
+        repaired = window.repair()
+        self._show_repair_pose = True
+        self._repair_pose_timer = self._repair_pose_duration
+        pygame.event.post(
+            pygame.event.Event(HAMMER_SWUNG)
+        )
+
+        return repaired
+
+        
+
+        
+    
+
+    
 
 
         
@@ -135,25 +148,22 @@ class Player(GameObject):
                 self._invulnerability_timer = 0
                 self._is_invulnerable = False
 
-        if self._is_repairing:
-            self._repair_timer -= dt
 
-            if self._repair_timer <= 0:
-                if self._repair_target is not None:
-                  self._repair_target.repair()
-                self._repair_timer = 0.0
-                self._is_repairing = False
-                self._repair_target = None
+        if self._show_repair_pose:
+            self._repair_pose_timer -= dt
+
+            if self._repair_pose_timer <= 0:
+                self._repair_pose_timer = 0
+                self._show_repair_pose = False
 
 
 
-        
 
     def draw(self, screen):
         if self._is_invulnerable:
             image = self._hurt_image
 
-        elif self._is_repairing:
+        elif self._show_repair_pose:
             image = self._fix_image
 
         else:

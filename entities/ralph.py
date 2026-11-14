@@ -8,6 +8,7 @@ import math
 
 from entities.game_object import GameObject
 from entities.brick import Brick
+from events import RALPH_DESTROYED_WINDOW, RALPH_ATTACKED
 
 from config import (
     BRICK_SIZE,
@@ -176,6 +177,10 @@ class Ralph(GameObject):
         self._building.break_window(floor_number, window_number)
         self._broken_windows.add((floor_number, window_number))
 
+        pygame.event.post(
+            pygame.event.Event(RALPH_DESTROYED_WINDOW)
+        )
+
     def finish_intro(self):
         """Finish the introduction and prepare rooftop gameplay."""
         self._move_timer = 0.0
@@ -206,6 +211,9 @@ class Ralph(GameObject):
 
     def attack(self):
         """Create a random number of bricks during an attack."""
+        pygame.event.post(
+            pygame.event.Event(RALPH_ATTACKED)
+        )
         brick_number = random.randint(1, 3)
         brick_list = []
         
