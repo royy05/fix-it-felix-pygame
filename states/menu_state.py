@@ -172,7 +172,7 @@ class MenuState(GameState):
         # draw instructions
         
         instructions = [
-            "Arrow keys / WASD : Move    SPACE : Fix a window",
+            "Arrow keys / WASD : Move    Press SPACE 3 times : Fix a window",
             f"Repair every broken window within {int(S.GAME_DURATION)} seconds!",
             f"You have {S.MAX_LIVES} lives - each brick hit costs one.",
             "Bricks fall faster as time passes!"
