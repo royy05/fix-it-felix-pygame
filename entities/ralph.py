@@ -210,18 +210,33 @@ class Ralph(GameObject):
             
 
     def attack(self):
-        """Create a random number of bricks during an attack."""
-        pygame.event.post(
+      
+      """Create 1 to 3 bricks that drop vertically."""
+
+      pygame.event.post(
             pygame.event.Event(RALPH_ATTACKED)
         )
-        brick_number = random.randint(1, 3)
-        brick_list = []
-        
-        for _ in range(brick_number):
-            brick = self.drop_debris()
+
+      brick_number = random.randint(1, 3)
+      brick_list = []
+
+      brick_width, brick_height = BRICK_SIZE
+      gap = 10
+
+      total_width = (
+            brick_number * brick_width
+            + (brick_number - 1) * gap
+        )
+
+      start_x = self._x + (self._width - total_width) / 2
+      for i in range(brick_number):
+            brick_x = start_x + i * (brick_width+gap)
+            brick = self.drop_debris(brick_x)
             brick_list.append(brick)
-            
-        return brick_list
+
+      return brick_list
+
+    
         
             
     def set_attack_parameters(self, spawn_interval, debris_speed):
@@ -229,15 +244,18 @@ class Ralph(GameObject):
         self._move_interval = spawn_interval
         self._debris_speed = debris_speed
 
-    def drop_debris(self):
+    def drop_debris(self,x):
         """Create and return a new Brick object."""
         brick_width, brick_height = BRICK_SIZE
-        brick = Brick(self._x,
+        brick = Brick(x,
                       self._y,
                       brick_width,
                       brick_height,
-                      self._debris_speed)
+                      self._debris_speed
+                      )
+
         return brick
+
 
     def update(self, dt):
         """Update Ralph according to his current state."""
