@@ -10,7 +10,10 @@ from events import HAMMER_SWUNG
 class Player(GameObject):
     def __init__(self, x, y, width, height, image=None):
         super().__init__(x, y, width, height) #push: remove image
+        
+        self._entrance_speed = 100.0
         self._speed = FELIX_SPEED
+        
         self._lives = MAX_LIVES
         self._invulnerability_timer = 0.0
         self._is_invulnerable = False
@@ -86,7 +89,16 @@ class Player(GameObject):
         if self._y + self._height > bottom:
             self._y = bottom - self._height
     
-
+    def enter_scene(self, dt, target_x):
+        """Move Felix into the scene until he reaches his starting position."""
+        self._x += self._entrance_speed * dt
+        
+        if self._x >= target_x:
+            self._x = target_x
+            return True
+        
+        return False
+    
     def take_damage(self):
         if self._is_invulnerable:
             return False
