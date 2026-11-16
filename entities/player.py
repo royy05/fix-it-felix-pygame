@@ -103,7 +103,7 @@ class Player(GameObject):
         if self._is_invulnerable:
             return False
 
-        self._lives -= 1
+        self.lives -= 1
 
         self._is_invulnerable = True
         self._invulnerability_timer = PLAYER_INVULNERABILITY_TIME
