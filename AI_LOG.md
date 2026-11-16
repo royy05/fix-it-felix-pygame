@@ -1,6 +1,9 @@
 # AI Usage Log
+**Project:** Fix-It Felix Jr. – Pygame  
+**Development Period:** November 2026  
+**AI Tools Used:** ChatGPT and Claude
 
-Record each AI-assisted task with:
+The following details are recorded.
 - Date and team member
 - Task and prompt used
 - AI-generated suggestions or code received
@@ -8,11 +11,247 @@ Record each AI-assisted task with:
 - Tests/validation performed
 - Final result
 
-TODO: Add entries as the project develops.
+# AI Usage Log for Building, Windows, and Menu
 
-# AI Usage Log – Member 3 (Lin Lat Eain)
+##  1. Project Structure and Initial Code Skeleton
 
-## Entry 1: Ralph Class Design and Introduction Logic
+**Date:** November 10, 2026  
+**Task and Prompt Used:**
+
+"Can you give me a reference design for the initial project structure for our Fix-It Felix Pygame project, including folders, Python files, class responsibilities, method skeletons and naming conventions."
+
+**AI Suggestions:**
+- Proposed separate folders for entities, states and other supporting modules.
+- Suggested class responsibilities and initial method structures.
+- Recommended `config.py` for centralized game constants.
+
+**Student Changes:**
+- Reviewed the proposed structure and discussed file responsibilities with teammates.
+- Followed the agreed class, file and method naming conventions.
+- Used the suggested skeleton as the foundation for individual implementations.
+
+**Tests/Validation:**
+- Reviewed class responsibilities and method interfaces.
+- Checked compatibility between members' assigned modules.
+
+**Final Result:** Established a consistent project structure that supported independent development and integration.
+
+---
+
+## 2. Abstract GameObject Structure
+
+**Date:** November 12, 2026  
+**Task and Prompt Used:**
+
+"Help design an abstract GameObject parent class for our Pygame project. What common attributes and methods should it contain, and how should other entities inherit from it?"
+
+**AI Suggestions:**
+- Recommended using `ABC` and `@abstractmethod` for abstraction.
+- Suggested common methods such as `update(dt)` and `draw(screen)`.
+- Explained how subclasses could override abstract methods with their own implementations.
+
+**Student Changes:**
+- Implemented the abstract parent class in `entities/game_object.py`.
+- Kept shared functionality in the parent class and entity-specific behaviour in subclasses.
+- Followed the method naming conventions established during project planning.
+
+**Tests/Validation:**
+- Reviewed abstract method definitions.
+- Checked that child classes implemented the required methods before instantiation.
+
+**Final Result:** Established a common abstract structure for game entities, supporting inheritance and consistent class design.
+
+---
+
+## 3. Building and Brick Wall Construction
+
+**Date:** November 13, 2026  
+**Task and Prompt Used:**
+
+"Guide me in constructing a four-floor building with 16 windows and systematically arranged bricks. How can I calculate their positions and organize the objects using separate classes?"
+
+**AI Suggestions:**
+- Recommended nested loops for generating four floors and four windows per floor.
+- Suggested using collections to manage multiple Window and Brick objects.
+- Explained coordinate calculations for consistent spacing and alignment.
+- Recommended using shared dimensions from `config.py`.
+
+**Student Changes:**
+- Implemented building construction in `entities/building.py`.
+- Organized window and brick placement according to the building dimensions.
+- Used configuration constants to maintain consistent positioning.
+- Kept building management separate from individual object rendering.
+
+**Tests/Validation:**
+- Inspected the four-floor, 16-window arrangement.
+- Checked brick alignment, spacing and building dimensions.
+- Adjusted object positions after visual inspection.
+
+**Final Result:** Implemented the building structure with systematically positioned windows and bricks.
+
+---
+
+## 4. Window Repair and Three-Space-Bar Mechanism
+
+**Date:** November 13, 2026  
+**Task and Prompt Used:**
+
+"How can I implement a window repair system where each broken window requires the player to press the Space bar three times before it changes into its fixed appearance?"
+
+**AI Suggestions:**
+- Suggested using a counter to track the number of Space-bar presses.
+- Recommended handling `pygame.KEYDOWN` and checking `pygame.K_SPACE`.
+- Explained how to check the repair counter against the required three-press condition.
+- Suggested changing the window's condition and appearance after the third press.
+
+**Student Changes:**
+- Implemented the repair counter in `entities/window.py`.
+- Connected Space-bar input to the window repair interaction.
+- Updated the window's condition and visual appearance after three successful presses.
+- Prevented already repaired windows from receiving additional repair progress.
+
+**Tests/Validation:**
+- Checked the window appearance before repair and after each Space-bar press.
+- Verified that the third press changed the window into its fixed appearance.
+- Checked that repaired windows could no longer accumulate repair progress.
+
+**Final Result:** Implemented the three-Space-bar repair mechanism with a visual transition from broken to fixed windows.
+
+---
+
+## 5. Image Asset Path Handling
+
+**Date:** November 14, 2026  
+**Task and Prompt Used:**
+
+"I am loading images using `pygame.image.load('path')` directly. How can I make image paths more reliable across different directories and computers?"
+
+**AI Suggestions:**
+- Recommended `os.path.join()` for combining directory paths.
+- Suggested `os.path.dirname(__file__)` and `os.path.abspath()` for locating paths relative to the Python file.
+- Explained how to construct reusable asset paths.
+
+**Student Changes:**
+- Replaced direct path construction with `os.path.join()`.
+- Adapted the paths to the project's `assets/` folder.
+- Applied consistent path handling when loading menu backgrounds and character images.
+
+**Tests/Validation:**
+- Ran the game to check whether images loaded correctly.
+- Checked asset paths after organizing project folders.
+
+**Final Result:** Improved asset path handling and reduced dependency on manually written relative paths.
+
+---
+
+## 6. Character and Window Image State Changes
+
+**Date:** November 14, 2026  
+**Task and Prompt Used:**
+
+"How can I switch character and window images according to their states? I want Felix and Ralph to display different images when idle or hurt, and windows to have different appearances when broken or repaired."
+
+**AI Suggestions:**
+- Recommended storing separate image surfaces for different states.
+- Suggested using state variables or enumerations to determine which image to display.
+- Explained how `screen.blit()` displays the currently selected image.
+- Recommended loading images once rather than repeatedly during drawing.
+
+**Student Changes:**
+- Organized image assets according to their visual states.
+- Applied state-based image selection where appropriate.
+- Used window conditions to determine broken and repaired appearances.
+- Coordinated character image-state integration with the relevant entity implementations.
+
+**Tests/Validation:**
+- Inspected image changes between different states.
+- Checked image rendering and positioning during gameplay.
+
+**Final Result:** Established state-based image switching for character appearances and window conditions.
+
+---
+
+## 7. Abstract Game State and Menu Text Rendering
+
+**Date:** November 14, 2026  
+**Task and Prompt Used:**
+
+"How can I create an abstract GameState class and display text in my Pygame menu, including the game title, Start button and keyboard instructions?"
+
+**AI Suggestions:**
+- Recommended abstract methods such as `enter()`, `handle_event(event)`, `update(dt)` and `draw(screen)`.
+- Explained Pygame font initialization and text rendering using `pygame.font.Font()` and `render()`.
+- Suggested using `screen.blit()` to position rendered text.
+- Recommended keeping menu-specific drawing and event handling inside MenuState.
+
+**Student Changes:**
+- Implemented the abstract base class in `states/game_state.py`.
+- Created menu text elements in `states/menu_state.py`.
+- Adjusted font sizes, text positions and visual hierarchy.
+- Added instructions for Enter/Space to start and Escape to quit.
+
+**Tests/Validation:**
+- Inspected the visibility and alignment of menu text.
+- Checked that the title and instructions were readable.
+- Reviewed the abstract methods implemented by the concrete menu state.
+
+**Final Result:** Completed the abstract game-state structure and menu text-rendering functionality.
+
+---
+
+## 8. Menu Button, Mouse Events and State Transition
+
+**Date:** November 15, 2026  
+**Task and Prompt Used:**
+
+"How can I make the Start button interactive using both mouse clicks and keyboard inputs, and switch from MenuState to PlayingState when the player starts the game?"
+
+**AI Suggestions:**
+- Recommended handling `pygame.MOUSEBUTTONDOWN` and `pygame.KEYDOWN` events.
+- Suggested using `pygame.Rect` and `collidepoint()` to detect clicks inside the Start button.
+- Explained how to request a state transition through the GameManager.
+- Recommended keeping state-switching logic separate from menu drawing.
+
+**Student Changes:**
+- Implemented mouse click detection for the Start button.
+- Connected Enter, Space and mouse click interactions to the start functionality.
+- Integrated the transition from MenuState to PlayingState through the project's state-management structure.
+- Kept Escape as the menu-specific quit instruction.
+
+**Tests/Validation:**
+- Tested clicks inside and outside the Start button.
+- Tested Enter and Space as alternative start controls.
+- Verified that the game transitioned from the menu to gameplay correctly.
+
+**Final Result:** Implemented an interactive main menu supporting mouse and keyboard input and the transition to PlayingState.
+
+---
+
+## 9. UML Class Diagram – Initial Structure
+
+**Date:** November 16, 2026  
+**Task and Prompt Used:**
+
+"create a draw.io UML class diagram skeleton with our project's classes, relationships and appropriate UML arrows so that I can add the attributes and methods in that file. Have the skeleton structure already constructed according to our project details so I can adjust it over."
+
+**AI Suggestions:**
+- Generated the initial class boxes and diagram layout.
+- Provided inheritance and association relationships with connecting UML arrows.
+- Organized the diagram into a framework for further editing.
+
+**Student Changes:**
+- Opened the generated diagram in draw.io.
+- Updated the actual class attributes and methods to align with the project's implementation.
+- Reviewed and adjusted relationships and layout to reflect the implemented code.
+
+**Tests/Validation:**
+- Compared the diagram against the actual Python files.
+- Checked class names, attributes, methods and UML relationships.
+
+**Final Result:** Produced the UML class diagram using Claude's initial framework, with independent modifications and confirmations.
+
+## AI Usage Log for Game Flow and Management
+##  1: Ralph Class Design and Introduction Logic
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -43,7 +282,7 @@ Completed the random window selection and window destruction request logic.
 
 ---
 
-## Entry 2: Ralph Climbing Movement
+##  2: Ralph Climbing Movement
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -73,7 +312,7 @@ Completed the basic climbing movement and target-arrival logic.
 
 ---
 
-## Entry 3: Ralph Introduction Completion
+##  3: Ralph Introduction Completion
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -100,7 +339,7 @@ Completed the initial introduction-ending method. Rooftop positioning remains pe
 
 ---
 
-## Entry 4: Brick Creation and Ralph Debris Integration
+##  4: Brick Creation and Ralph Debris Integration
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -132,7 +371,7 @@ Completed Ralph's `drop_debris()` method. The `attack()` method and integration 
 
 ---
 
-## Entry 5: Configuration Compatibility Review
+##  5: Configuration Compatibility Review
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -163,7 +402,7 @@ Identified configuration compatibility requirements and agreed on the updated na
 
 ---
 
-## Entry 6: GitHub Collaboration Setup
+##  6: GitHub Collaboration Setup
 
 **Date:** 13 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -193,7 +432,7 @@ Successfully configured a personal development branch for independent coding and
 
 ---
 
-## Entry 7: Ralph Rooftop Patrol Movement
+##  7: Ralph Rooftop Patrol Movement
 
 **Date:** 14 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -226,7 +465,7 @@ Completed Ralph's rooftop positioning and horizontal patrol movement, including 
 
 ---
 
-## Entry 8: Implementing Ralph's Attack Cycle and Difficulty-Based Timing
+##  8: Implementing Ralph's Attack Cycle and Difficulty-Based Timing
 
 **Date:** 14 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -263,7 +502,7 @@ Implemented Ralph's repeated movement and attack cycle, allowing his attack freq
 
 ---
 
-## Entry 9: Implementing Random Brick Generation and Returning Bricks
+##  9: Implementing Random Brick Generation and Returning Bricks
 
 **Date:** 14 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -297,7 +536,7 @@ Completed Ralph's random brick generation and return mechanism. Newly created Br
 
 ---
 
-## Entry 10: Planning Ralph and Entity Integration with PlayingState
+##  10: Planning Ralph and Entity Integration with PlayingState
 
 **Date:** 14 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -328,7 +567,7 @@ Completed Ralph's random brick generation and return mechanism. Newly created Br
 Established an implementation sequence for integrating Ralph's completed core logic into PlayingState while maintaining the agreed project architecture.
 
 
-## Entry 11: Implementing Window Repair Tracking in Building
+##  11: Implementing Window Repair Tracking in Building
 
 **Date:** 15 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
@@ -363,7 +602,7 @@ Established an implementation sequence for integrating Ralph's completed core lo
 The Building class can now track the windows originally broken by Ralph, count the windows fully repaired by Felix, and determine when all required repairs are completed. This also provides the information needed for the win condition and gameplay HUD.
 
 
-## Entry 12: Implementing Gameplay HUD in PlayingState
+##  12: Implementing Gameplay HUD in PlayingState
 
 **Date:** 15 November 2026  
 **Team Member:** Member 3 – Lin Lat Eain  
