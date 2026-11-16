@@ -2,8 +2,11 @@
 
 import pygame
 import math
+import os
 
 from config import (
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
     GAME_DURATION,
     EASY_END,
     MEDIUM_END,
@@ -25,6 +28,7 @@ from entities.player import Player
 from entities.ralph import Ralph
 from states.win_state import WinState
 from states.lose_state import LoseState
+from events import GAME_WON, GAME_LOST
 
 class PlayingState(GameState):
     def __init__(self, game_manager):
@@ -46,6 +50,25 @@ class PlayingState(GameState):
         #in order to prevent previous playing state's objects (before restarting) still active after restart,
         #we decided to initialize here. so all objects will be new when the PlayingState is active again.
         #create a fresh building
+        
+        asset_path = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "assets",
+            "images",
+            "background",
+            "background.png"
+        )
+        
+        self._background = pygame.image.load(
+            asset_path
+        ).convert()
+        
+        self._background = pygame.transform.scale(
+            self._background,
+            (SCREEN_WIDTH, SCREEN_HEIGHT)
+        )
+        
         self._building = Building()
         
         #create felix
@@ -147,6 +170,7 @@ class PlayingState(GameState):
         #Handle collisions
         self.handle_collisions()
 
+
         #Check game-ending conditions
         self.check_win_condition()
         
@@ -156,6 +180,9 @@ class PlayingState(GameState):
         
     def draw(self, screen):
         """Draw building, entities and gameplay HUD."""
+        
+        screen.blit(self._background, (0,0))
+        
         self._draw_entity_collection(screen)
         self._draw_debris(screen)
 
@@ -198,12 +225,18 @@ class PlayingState(GameState):
 
     def check_win_condition(self):
         if self._building.all_windows_repaired() and self._player.lives >=1:
+            pygame.event.post(
+                pygame.event.Event(GAME_WON)
+            )
             self._game_manager.change_state(WinState(self._game_manager))
 
     def check_lose_condition(self):
         if self._player.lives == 0 or (
             self._remaining_time <= 0 and not self._building.all_windows_repaired()
             ):
+            pygame.event.post(
+                pygame.event.Event(GAME_LOST)
+            )
             self._game_manager.change_state(LoseState(self._game_manager))
 
     def _find_repair_target(self):

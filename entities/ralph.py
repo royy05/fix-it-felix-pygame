@@ -8,6 +8,7 @@ import math
 
 from entities.game_object import GameObject
 from entities.brick import Brick
+from events import RALPH_DESTROYED_WINDOW, RALPH_ATTACKED
 
 from config import (
     BRICK_SIZE,
@@ -29,7 +30,7 @@ class Ralph(GameObject):
         self._state = RalphState.CLIMBING
 
         # Movement
-        self._move_speed = 100.0
+        self._move_speed = 200.0
         self._direction = 1
         self._target_x = x
         self._target_y = y
@@ -59,8 +60,8 @@ class Ralph(GameObject):
         self._sorted_windows_to_destroy = []
         
         # Load images
-        self._idle_image = pygame.image.load("assets/characters/ralph/ralph_idle.png").convert_alpha()
-        self._throw_image = pygame.image.load("assets/characters/ralph/ralph_throw.png").convert_alpha()
+        self._idle_image = pygame.image.load("assets/images/characters/ralph/ralph_idle.png").convert_alpha()
+        self._throw_image = pygame.image.load("assets/images/characters/ralph/ralph_throw.png").convert_alpha()
 
         # Scale images
         self._idle_image = pygame.transform.scale(
@@ -176,6 +177,10 @@ class Ralph(GameObject):
         self._building.break_window(floor_number, window_number)
         self._broken_windows.add((floor_number, window_number))
 
+        pygame.event.post(
+            pygame.event.Event(RALPH_DESTROYED_WINDOW)
+        )
+
     def finish_intro(self):
         """Finish the introduction and prepare rooftop gameplay."""
         self._move_timer = 0.0
@@ -205,15 +210,33 @@ class Ralph(GameObject):
             
 
     def attack(self):
-        """Create a random number of bricks during an attack."""
-        brick_number = random.randint(1, 3)
-        brick_list = []
-        
-        for _ in range(brick_number):
-            brick = self.drop_debris()
+      
+      """Create 1 to 3 bricks that drop vertically."""
+
+      pygame.event.post(
+            pygame.event.Event(RALPH_ATTACKED)
+        )
+
+      brick_number = random.randint(1, 3)
+      brick_list = []
+
+      brick_width, brick_height = BRICK_SIZE
+      gap = 10
+
+      total_width = (
+            brick_number * brick_width
+            + (brick_number - 1) * gap
+        )
+
+      start_x = self._x + (self._width - total_width) / 2
+      for i in range(brick_number):
+            brick_x = start_x + i * (brick_width+gap)
+            brick = self.drop_debris(brick_x)
             brick_list.append(brick)
-            
-        return brick_list
+
+      return brick_list
+
+    
         
             
     def set_attack_parameters(self, spawn_interval, debris_speed):
@@ -221,15 +244,18 @@ class Ralph(GameObject):
         self._move_interval = spawn_interval
         self._debris_speed = debris_speed
 
-    def drop_debris(self):
+    def drop_debris(self,x):
         """Create and return a new Brick object."""
         brick_width, brick_height = BRICK_SIZE
-        brick = Brick(self._x,
+        brick = Brick(x,
                       self._y,
                       brick_width,
                       brick_height,
-                      self._debris_speed)
+                      self._debris_speed
+                      )
+
         return brick
+
 
     def update(self, dt):
         """Update Ralph according to his current state."""

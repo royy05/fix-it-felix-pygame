@@ -39,7 +39,7 @@ class GameManager:
             self.update(dt)
             self.draw()
 
-        self.quit()
+        self.shutdown()
 
     def handle_events(self, events): #process user's input and window events
         for event in events:
@@ -65,13 +65,23 @@ class GameManager:
         pygame.display.flip()
 
     def quit(self):
-        """Clean up states and shut down pygame safely."""
+        """Request the game loop to stop."""
+        self._running = False
+        
+    def shutdown(self):
+        """ clean up game resources and shut down pygame """
         if self._current_state is not None:
             self._current_state.exit()
             self._current_state = None
+            
+        if pygame.mixer.get_init():
+            self._sound_manager.stop_music()
         
-        self._running = False 
-        self._sound_manager.stop_music()
         pygame.quit()
         
+# quit and shutdown structure :
+# quit() sets _running = False so the game loop stops
+# shutdown() exits the active state
+# music is stopped if the mixer is initialized
+# pygame.quit() is called once.
         

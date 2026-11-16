@@ -3,7 +3,7 @@
 import pygame
 from events import (
     PLAYER_DAMAGED,
-    WINDOW_REPAIRED,
+    HAMMER_SWUNG,
     GAME_WON,
     GAME_LOST,
     RALPH_DESTROYED_WINDOW,
@@ -29,7 +29,7 @@ class SoundManager:
         if event.type == PLAYER_DAMAGED:
             self.play_sound("damage")
 
-        elif event.type == WINDOW_REPAIRED:
+        elif event.type == HAMMER_SWUNG:
             self.play_sound('hammer')
 
         elif event.type == GAME_WON:
@@ -66,7 +66,7 @@ class SoundManager:
         if name == "background":
             if not pygame.mixer.music.get_busy():
 
-                pygame.mixer.music.load("assets/audio/backgroundsound.mp4")
+                pygame.mixer.music.load("assets/audio/backgroundsound.mp3")
                 pygame.mixer.music.set_volume(self._music_volume)
                 pygame.mixer.music.play(-1)
 

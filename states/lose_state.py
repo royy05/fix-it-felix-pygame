@@ -3,8 +3,6 @@
 import pygame
 
 from states.game_state import GameState
-from states.menu_state import MenuState
-from states.playing_state import PlayingState
 
 
 
@@ -19,10 +17,12 @@ class LoseState(GameState):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    from states.menu_state import MenuState
                     self._game_manager.change_state(
                         MenuState(self._game_manager)
                     )
                 elif event.key == pygame.K_SPACE:
+                    from states.playing_state import PlayingState
                     self._game_manager.change_state(
                         PlayingState(self._game_manager)
                     )
