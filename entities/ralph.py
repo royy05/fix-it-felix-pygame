@@ -132,7 +132,6 @@ class Ralph(GameObject):
     def climb(self, dt): 
         """Move Ralph floor by floor and destroy selected windows."""
 
-
         if self._current_window_index < len(self._sorted_windows_to_destroy):
             current_window = self._sorted_windows_to_destroy[self._current_window_index] 
             floor_num, window_num = current_window   #tuple unpacking
@@ -170,6 +169,19 @@ class Ralph(GameObject):
                 #Ralph position update with overshooting problem prevention
                 self._x += step * dx 
                 self._y += step * dy
+        
+        else:
+            #Climb vertically to the rooftop after breaking the final window.
+            self._target_x = self._x #horizontal position the same
+            self._target_y = self._building.roof_y - self._height
+            
+            distance = abs(self._target_y - self._y)
+            step = dt * self._move_speed
+            
+            if distance <= step:
+                self._y = self._target_y
+            else:
+                self._y -= step
 
                       
     def destroy_window(self, floor_number, window_number):
@@ -185,9 +197,6 @@ class Ralph(GameObject):
         """Finish the introduction and prepare rooftop gameplay."""
         self._move_timer = 0.0
         self._attack_timer = 0.0
-        
-        self._x = self._building.roof_left
-        self._y = self._building.roof_y - self._height
 
         self._state = RalphState.MOVING
         self._direction = 1
@@ -235,10 +244,8 @@ class Ralph(GameObject):
             brick_list.append(brick)
 
       return brick_list
-
-    
-        
-            
+     
+     
     def set_attack_parameters(self, spawn_interval, debris_speed):
         """Receive current difficulty settings from PlayingState."""
         self._move_interval = spawn_interval
@@ -271,7 +278,8 @@ class Ralph(GameObject):
             
             self.climb(dt) #starting state is climbing
             
-            if self._current_window_index >= len(self._sorted_windows_to_destroy):
+            if (self._current_window_index >= len(self._sorted_windows_to_destroy)
+                and self._y <= self._building.roof_y - self._height):
                 self.finish_intro()
         
         elif self._state == RalphState.MOVING:
