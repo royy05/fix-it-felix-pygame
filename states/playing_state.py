@@ -39,7 +39,10 @@ class PlayingState(GameState):
         self._debris = []
         self._entities = []
 
-        self._game_started = False
+        self._game_started = False #Felix can be controlled 
+        self._felix_entering = False #Felix walking into the scene
+        self._felix_target_x = 0 #where Felix should stop
+        
         self._elapsed_time = 0.0
         self._remaining_time = GAME_DURATION
 
@@ -73,7 +76,7 @@ class PlayingState(GameState):
         
         #create felix
         felix_width, felix_height = FELIX_SIZE
-        felix_x = PLAY_AREA[0] + 10
+        felix_x = - felix_width
         felix_y = GROUND_Y - felix_height
         self._player = Player(
             felix_x,
@@ -81,6 +84,10 @@ class PlayingState(GameState):
             felix_width, 
             felix_height
         )
+        
+        #Felix's final entrance position
+        self._felix_target_x = PLAY_AREA[0] + 10
+        self._felix_entering = False
         
         #create Ralph
         ralph_width, ralph_height = RALPH_SIZE
@@ -106,6 +113,7 @@ class PlayingState(GameState):
         
         # Reset gameplay timers
         self._game_started = False
+        self._felix_entering = False
         self._elapsed_time = 0.0
         self._remaining_time = GAME_DURATION
         
@@ -154,11 +162,20 @@ class PlayingState(GameState):
         for brick in self._debris:
             brick.update(dt)
 
-        #Check whether the introduction has finished so the actual
-        # 90 secs game can begin
-        if not self._game_started and not self._ralph.is_climbing:
-            self._game_started = True
-
+        #Start Felix's entrance after Ralph finishes climbing
+        if not self._game_started and not self._felix_entering:
+            if not self._ralph.is_climbing:
+                self._felix_entering = True
+        #Move Felix into the scene
+        if self._felix_entering:
+            arrived = self._player.enter_scene(
+                dt,
+                self._felix_target_x
+            )
+            if arrived:
+                self._felix_entering = False
+                self._game_started = True
+                
         #Update gameplay timer and difficulty
         if self._game_started:
             
@@ -279,11 +296,13 @@ class PlayingState(GameState):
                 entity.update(dt)
     
     def _draw_entity_collection(self, screen):
-        """Draw all entities while hiding Felix during the introduciton."""
-        
+        """Draw entities and show Felix during his entrance."""
+
         for entity in self._entities:
-            if entity == self._player and not self._game_started:
-                continue
+            if entity == self._player:
+                if not self._game_started and not self._felix_entering:
+                    continue
+
             entity.draw(screen)
 
     def _draw_debris(self, screen):
