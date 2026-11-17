@@ -196,7 +196,7 @@ This project was developed collaboratively as part of an Object-Oriented Program
 
 | Team Member | Contribution |
 |---|---|
-| Thant Htut Aung | Felix, Bricks, Sound, and Win/Lose screen |
+| Thant Htut Aung | Felix, Brick, Sound, and Win/Lose screen |
 | Lin Lat Eain | Game Flow, Management, Ralph |
 | Soe Yu Nandar | Building, Windows, Menu, Images, and Game State |
 
