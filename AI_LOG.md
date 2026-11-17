@@ -630,3 +630,286 @@ The Building class can now track the windows originally broken by Ralph, count t
 
 **Final result:**
 Implemented a basic gameplay HUD in PlayingState that displays the timer, Felix's remaining lives and window repair progress.
+
+
+**## 13: GameManager Class Design and Structure**
+
+**Date:** 15 November 2026
+
+**Task:** Planning the structure and responsibilities of the GameManager class.
+
+**Prompt Used:**
+
+"Help me plan the GameManager class for my Pygame project. What methods should it contain, and how should it interact with the GameState class?"
+
+**AI-generated suggestions or code received:**
+
+- Explained the role of GameManager in controlling the overall game flow.
+- Suggested separating game management responsibilities from individual game states.
+- Explained how GameManager should manage the active game state.
+- Suggested implementing methods for state transitions, event handling, updating, drawing and quitting the game.
+- Explained how GameManager can communicate with GameState through its methods.
+
+**Student changes and reasoning:**
+
+- Reviewed the proposed GameManager structure.
+- Organized the responsibilities of GameManager separately from the responsibilities of individual game states.
+- Used the suggested structure as a reference when planning the implementation.
+
+**Tests/validation performed:**
+
+- Reviewed the responsibilities assigned to GameManager.
+- Checked the relationship between GameManager and GameState.
+- Reviewed whether the proposed methods covered the main game management operations.
+
+**Final result:**
+
+Established the basic structure and responsibilities of GameManager for managing the game's overall flow.
+
+---
+
+**## 14: State Transition Implementation in GameManager**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing `change_state()` in `game_manager.py`.
+
+**Prompt Used:**
+
+"Help me implement the change_state() method in GameManager. How should I properly exit the current state, assign the new state and enter the new state?"
+
+**AI-generated suggestions or code received:**
+
+- Explained the purpose of the `change_state()` method.
+- Suggested calling the current state's `exit()` method before changing states.
+- Recommended assigning the new state to the current state attribute.
+- Explained that the new state's `enter()` method should be called after the assignment.
+- Reviewed the initial implementation and identified an indentation issue that could prevent the initial state from being assigned correctly.
+
+**Student changes and reasoning:**
+
+- Independently implemented the `change_state()` method.
+- Followed the recommended sequence of exiting the current state, assigning the new state and entering the new state.
+- Corrected the indentation issue based on the AI feedback.
+
+**Tests/validation performed:**
+
+- Reviewed the method's execution order.
+- Checked that the current state is exited before the new state is assigned.
+- Verified that the new state's `enter()` method is called after the transition.
+
+**Final result:**
+
+Completed the `change_state()` method with the correct state transition sequence and initialization logic.
+
+---
+
+**## 15: Event Handling Implementation in GameManager**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing `handle_events()` in `game_manager.py`.
+
+**Prompt Used:**
+
+"How can I implement handle_events() in GameManager to process Pygame events, detect when the player closes the game and forward events to the currently active game state?"
+
+**AI-generated suggestions or code received:**
+
+- Explained how to retrieve Pygame events using `pygame.event.get()`.
+- Recommended checking `event.type` against `pygame.QUIT` to detect a quit request.
+- Explained how to stop the game loop when a quit event occurs.
+- Suggested forwarding individual events to the current state's `handle_event()` method.
+- Reviewed the initial implementation and identified issues involving duplicate event retrieval, incorrect event-type checking and forwarding events inside the loop.
+
+**Student changes and reasoning:**
+
+- Independently implemented the `handle_events()` method.
+- Revised the event retrieval and checking logic based on the feedback.
+- Ensured that individual events are forwarded to the currently active game state.
+
+**Tests/validation performed:**
+
+- Reviewed the event iteration and conditional statements.
+- Checked that the quit event is detected through `event.type`.
+- Verified the intended event-forwarding sequence.
+
+**Final result:**
+
+Completed the event-handling logic to process Pygame events, handle quit requests and forward individual events to the active game state.
+
+---
+
+**## 16: Game State Update and Delta Time**
+
+**Date:** 15 November 2026
+
+**Task:** Understanding and implementing the `update(dt)` method in GameManager.
+
+**Prompt Used:**
+
+"Explain how the update(dt) method should work in GameManager. Which object should be updated, and what is the purpose of passing delta time to the current game state?"
+
+**AI-generated suggestions or code received:**
+
+- Explained the difference between updating the active game state and drawing it to the screen.
+- Clarified that GameManager should delegate updating to the currently active state.
+- Explained the purpose of passing delta time (`dt`) to the state's `update()` method.
+- Described how delta time supports frame-independent game movement and timing.
+
+**Student changes and reasoning:**
+
+- Reviewed the responsibilities of GameManager and GameState.
+- Identified that the active game state should handle its own gameplay updates.
+- Used the explanation to understand the correct implementation of `update(dt)`.
+
+**Tests/validation performed:**
+
+- Reviewed the expected relationship between `GameManager.update()` and `GameState.update()`.
+- Checked the purpose of passing delta time between the two classes.
+
+**Final result:**
+
+Clarified the update responsibility of GameManager and the role of delta time in maintaining consistent gameplay behaviour.
+
+---
+
+**## 17: Screen Rendering and Display Updating**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing and reviewing the `draw()` method in `game_manager.py`.
+
+**Prompt Used:**
+
+"Help me implement and review the draw() method in GameManager. What is the correct order for clearing the screen, drawing the current game state and updating the display?"
+
+**AI-generated suggestions or code received:**
+
+- Explained the purpose of clearing the screen before rendering a new frame.
+- Recommended calling the current state's `draw()` method to render its contents.
+- Explained the purpose of `pygame.display.flip()` for updating the displayed frame.
+- Reviewed the revised implementation and confirmed that the operations were correctly ordered.
+
+**Student changes and reasoning:**
+
+- Independently implemented the `draw()` method.
+- Followed the correct rendering sequence.
+- Used the current game state's `draw()` method to delegate screen rendering.
+
+**Tests/validation performed:**
+
+- Reviewed the order of screen clearing, state rendering and display updating.
+- Checked that the implementation followed the intended rendering structure.
+
+**Final result:**
+
+Completed the `draw()` method with the correct rendering sequence for displaying the active game state.
+
+---
+
+**## 18: Game Shutdown Implementation**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing and reviewing the `quit()` method in `game_manager.py`.
+
+**Prompt Used:**
+
+"Help me implement the quit() method in GameManager and explain how setting the running flag to False and calling pygame.quit() stops the game."
+
+**AI-generated suggestions or code received:**
+
+- Explained the purpose of the `_running` attribute in controlling the main game loop.
+- Recommended setting `_running` to `False` to terminate the game loop.
+- Explained how `pygame.quit()` shuts down the initialized Pygame modules.
+- Reviewed the implementation and confirmed that the shutdown logic was correct.
+
+**Student changes and reasoning:**
+
+- Independently implemented the `quit()` method.
+- Set the running flag to `False` to stop the game loop.
+- Called `pygame.quit()` to shut down Pygame.
+
+**Tests/validation performed:**
+
+- Reviewed the shutdown sequence.
+- Checked that the running flag is updated before Pygame is shut down.
+
+**Final result:**
+
+Completed the `quit()` method to handle game termination and Pygame shutdown.
+
+---
+
+**## 19: Implementing the Winning Condition in PlayingState**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing the winning condition in `PlayingState`.
+
+**Prompt Used:**
+
+"How can I implement a winning condition in PlayingState? I want to check whether all broken windows have been repaired and whether Felix still has at least one life remaining. How should I transition from PlayingState to WinState?"
+
+**AI-generated suggestions or code received:**
+
+- Explained how Boolean conditions can be used to determine whether the player has fulfilled the winning requirements.
+- Suggested checking whether all windows have been repaired using the appropriate Building method.
+- Explained how to check whether Felix has at least one remaining life.
+- Explained how to use the `GameManager.change_state()` method to transition between game states.
+- Clarified the relationship between constructor inheritance and state transitions.
+
+**Student changes and reasoning:**
+
+- Independently implemented `check_win_condition()` in PlayingState.
+- Used the Building class to determine whether all required windows had been repaired.
+- Included the condition that Felix must have at least one remaining life.
+- Connected the winning condition to the transition into WinState.
+
+**Tests/validation performed:**
+
+- Reviewed the Boolean conditions used to determine victory.
+- Checked the intended conditions for successful completion.
+- Reviewed the state transition logic.
+
+**Final result:**
+
+Implemented `check_win_condition()` in PlayingState to determine when the player has fulfilled the winning requirements and transition to WinState.
+
+---
+
+**## 20: Implementing the Losing Condition in PlayingState**
+
+**Date:** 15 November 2026
+
+**Task:** Implementing the losing condition in `PlayingState`.
+
+**Prompt Used:**
+
+"How can I implement a losing condition in PlayingState? I want to check whether Felix has lost all his lives or whether the timer has expired while some windows remain unrepaired. Also, explain how to use Boolean operators to combine these conditions."
+
+**AI-generated suggestions or code received:**
+
+- Explained how to check whether Felix has lost all his remaining lives.
+- Explained how to compare the remaining game time against zero.
+- Clarified the use of the `not` operator with `all_windows_repaired()` to identify unfinished repairs.
+- Explained the differences between the Boolean operators `or`, `and` and `not`.
+- Discussed whether to use `== 0` or `<= 0` when checking the remaining lives.
+
+**Student changes and reasoning:**
+
+- Independently implemented `check_lose_condition()` in PlayingState.
+- Used Boolean conditions to determine whether Felix had lost all his lives or the timer had expired while windows remained unrepaired.
+- Applied the `not` operator to check for unfinished window repairs.
+- Used the feedback to understand the appropriate comparison for the remaining lives condition.
+
+**Tests/validation performed:**
+
+- Reviewed the Boolean expressions and logical operators.
+- Checked the conditions for losing through depleted lives and expired time.
+- Reviewed the relationship between the timer condition and unfinished window repairs.
+
+**Final result:**
+
+Implemented `check_lose_condition()` in PlayingState to detect the losing conditions based on Felix's remaining lives and the game timer.
