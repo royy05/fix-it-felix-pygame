@@ -913,3 +913,313 @@ Implemented `check_win_condition()` in PlayingState to determine when the player
 **Final result:**
 
 Implemented `check_lose_condition()` in PlayingState to detect the losing conditions based on Felix's remaining lives and the game timer.
+
+
+# AI Usage Log for Player, Brick, and Entity Integration
+
+## 1. Brick Class Implementation and Collision Detection
+
+**Date and Time:** November 13, 2026&#x20;
+
+**Task and Prompt Used:**
+
+Asked for assistance with understanding and implementing the Brick class, including its relationship with the Player class and collision detection.
+
+**AI Suggestions:**
+
+- Explained how the Brick class inherits common attributes and methods from the `GameObject` parent class.
+- Explained how a falling brick can detect collisions with the player using `pygame.Rect.colliderect()`.
+- Suggested using a flag to prevent the same brick from damaging the player repeatedly.
+- Explained how the brick's falling movement can be calculated using delta time (`dt`).
+- Explained how inactive bricks can be removed from the active debris collection.
+
+**Student Changes and Reasoning:**
+
+- Worked on the Brick class using inheritance from `GameObject`.
+- Implemented the falling behavior using the brick's falling speed and delta time.
+- Used collision detection to check whether the brick overlaps with the player.
+- Connected brick collisions to the player's damage mechanism.
+- Used an active-status flag to manage bricks that leave the screen.
+
+**Tests/Validation:**
+
+- Reviewed the falling movement and collision logic.
+- Checked the interaction between Brick and Player.
+- Reviewed how inactive bricks are handled by the game.
+
+**Final Result:**
+
+Implemented the Brick class with falling behavior, collision detection, and player damage interaction.
+
+---
+
+## 2. Player Class Implementation and Mechanics
+
+**Date and Time:** November 13, 2026
+
+**Task and Prompt Used:**
+
+Asked for assistance with implementing and understanding the Player class, including movement, damage handling, invulnerability, and window repair mechanics.
+
+**AI Suggestions:**
+
+- Explained how Player inherits common properties and methods from `GameObject`.
+- Explained how to manage player attributes such as speed, lives, and invulnerability status.
+- Explained the use of delta time (`dt`) for frame-independent movement.
+- Suggested using a timer to manage temporary invulnerability after taking damage.
+- Explained how different images can represent the player's idle, repair, and hurt states.
+- Explained how the repair interaction can communicate with the Window object.
+
+**Student Changes and Reasoning:**
+
+- Implemented the Player class as a subclass of `GameObject`.
+- Added player attributes such as speed, lives, and invulnerability status.
+- Implemented movement and restricted Felix's movement within the play area.
+- Implemented damage handling and temporary invulnerability.
+- Added different images for idle, repair, and hurt animations.
+- Implemented the interaction between Felix and broken windows.
+- Used custom events to communicate relevant player actions.
+
+**Tests/Validation:**
+
+- Reviewed the player initialization and inheritance structure.
+- Checked movement and boundary calculations.
+- Reviewed the damage and invulnerability logic.
+- Tested the player mechanics within the game.
+
+**Final Result:**
+
+Implemented the Player class with movement, damage handling, temporary invulnerability, and window repair functionality.
+
+---
+
+## 3. Understanding Inheritance and get_rect() in GameObject
+
+**Date and Time:** November 15, 2026
+
+**Task and Prompt Used:**
+
+"Why do we use `player.get_rect()` inside brick.py even though there is no get_rect() method defined in the Brick class?"
+
+**AI Suggestions:**
+
+- Explained that both Player and Brick inherit the `get_rect()` method from the `GameObject` parent class.
+- Explained the difference between `self.get_rect()` and `player.get_rect()`.
+- Explained how `pygame.Rect()` represents an object's position and dimensions.
+- Explained how the inherited method supports collision detection between different objects.
+- Clarified that a child class does not need to redefine a method that it inherits from its parent class.
+
+**Student Changes and Reasoning:**
+
+- Shared and reviewed the implementation of `entities/game_object.py`.
+- Identified that `get_rect()` was already defined in the parent class.
+- Understood that `self.get_rect()` refers to the current Brick object, while `player.get_rect()` refers to the Player object.
+- Kept the shared method in `GameObject` instead of duplicating it in the child classes.
+
+**Tests/Validation:**
+
+- Reviewed the `GameObject` implementation.
+- Checked how both Player and Brick obtain their collision rectangles.
+- Reviewed the collision detection code.
+
+**Final Result:**
+
+Understood how inheritance allows Player and Brick to reuse the `get_rect()` method from GameObject and how this method supports collision detection.
+
+---
+
+## 4. Ralph's Multiple-Brick Dropping Mechanism
+
+**Date and Time:** November 15, 2026
+
+**Task and Prompt Used:**
+
+"Why does Ralph drop only one brick at a time even though the attack method is supposed to generate between one and three bricks? How can I make the bricks drop vertically in separate paths?"
+
+**AI Suggestions:**
+
+- Explained how `random.randint(1, 3)` generates a random number between one and three.
+- Identified that creating all bricks at the same X and Y coordinates would cause them to overlap.
+- Suggested distributing the bricks horizontally while keeping their initial Y coordinates the same.
+- Suggested calculating the total width required for the generated bricks and positioning them relative to Ralph's width.
+- Explained how the bricks can fall vertically by changing only their Y-coordinates.
+- Explained how `PlayingState.spawn_debris()` uses `self._debris.extend(new_bricks)` to add multiple Brick objects to the debris collection.
+- Explained that the existing PlayingState structure could already handle multiple returned Brick objects.
+
+**Student Changes and Reasoning:**
+
+- Reviewed Ralph's existing `attack()` and `drop_debris()` methods.
+- Modified the brick creation approach so that each brick could receive a different X-coordinate.
+- Updated `drop_debris()` to accept an X-coordinate as an argument.
+- Kept the initial Y-coordinate the same for the bricks created during one attack.
+- Reused the existing Brick falling mechanism to maintain vertical movement.
+- Kept the existing `PlayingState.spawn_debris()` structure because it already supports receiving multiple Brick objects through a list.
+
+**Tests/Validation:**
+
+- Ran the game after modifying the brick creation methods.
+- Checked the errors that occurred during execution.
+- Tested the updated attack mechanism.
+- Confirmed that Ralph could drop between one and three bricks in separate vertical paths.
+
+**Final Result:**
+
+Successfully tested the multiple-brick dropping mechanism. Ralph can generate one to three bricks per attack, and the bricks fall vertically in separate paths.
+
+---
+
+## 5. Debugging Method Arguments and Return Values
+
+**Date and Time:** November 15, 2026
+
+**Task and Prompt Used:**
+
+Shared the following Python errors with ChatGPT:
+
+`TypeError: Ralph.drop_debris() takes 1 positional argument but 2 were given`
+
+`AttributeError: 'NoneType' object has no attribute 'update'`
+
+Asked ChatGPT to explain why these errors occurred and how to fix them.
+
+**AI Suggestions:**
+
+- Explained that Python automatically passes `self` when calling an instance method.
+- Identified that `drop_debris()` needed to accept an additional X-coordinate argument.
+- Explained that a method without a return statement automatically returns `None`.
+- Explained why adding a `None` value to the debris list would cause an error when PlayingState tried to call `brick.update(dt)`.
+- Suggested returning the newly created Brick object from `drop_debris()`.
+
+**Student Changes and Reasoning:**
+
+- Updated the `drop_debris()` method definition to accept an additional X-coordinate.
+- Checked that the method created the Brick object using the correct constructor arguments.
+- Added `return brick` so the created object could be passed back to the attack method.
+- Reviewed how the returned list of Brick objects is received by PlayingState.
+- Used the traceback messages to understand the relationship between method arguments, return values, and object collections.
+
+**Tests/Validation:**
+
+- Ran the game and examined the traceback messages.
+- Corrected the method argument mismatch.
+- Corrected the missing return value.
+- Ran the game again and confirmed that the errors were resolved.
+- Confirmed that the multiple-brick mechanism worked as intended.
+
+**Final Result:**
+
+Resolved the method argument and `NoneType` errors. The Brick objects were successfully created, returned, and updated by PlayingState.
+
+---
+
+# AI Usage Log for Events and Sound Management
+
+## 6. Custom Pygame Events and Event Communication
+
+**Date and Time:** November 14, 2026
+
+**Task and Prompt Used:**
+
+Asked for guidance on defining custom Pygame events and connecting gameplay actions with other components of the game.
+
+**AI Suggestions:**
+
+- Explained how to define custom event constants in `events.py`.
+- Explained how `pygame.event.Event()` creates an event object.
+- Explained how `pygame.event.post()` places an event in the Pygame event queue.
+- Suggested using separate events for different gameplay actions.
+- Explained how SoundManager can receive events and play corresponding sound effects.
+- Explained how event-based communication allows different components to interact without directly depending on each other's internal implementation.
+
+**Student Changes and Reasoning:**
+
+- Worked on organizing custom event constants in `events.py`.
+- Used separate events for player damage, hammer swings, game wins, and game losses.
+- Connected relevant events to actions in the Player and Brick classes.
+- Coordinated with the member responsible for Ralph to integrate Ralph-related sound events.
+
+**Tests/Validation:**
+
+- Reviewed event names and their corresponding usage.
+- Checked where relevant classes post their events.
+- Reviewed the event-handling flow between GameManager and SoundManager.
+
+**Final Result:**
+
+Established custom event definitions and event-based communication for important gameplay actions.
+
+---
+
+## 7. SoundManager Implementation and Audio Integration
+
+**Date and Time:** November 14, 2026
+
+**Task and Prompt Used:**
+
+Asked for assistance with understanding and implementing the SoundManager class, particularly how to load sound effects, play background music, connect sounds to custom events, and control volume.
+
+**AI Suggestions:**
+
+- Explained the difference between `pygame.mixer.Sound()` and `pygame.mixer.music`.
+- Suggested storing sound effects in a dictionary to organize and retrieve them more easily.
+- Explained how `handle_event()` can connect custom events with their corresponding sound effects.
+- Suggested separate methods for playing sound effects, starting background music, stopping music, and adjusting volume.
+- Helped identify an incorrect background music file extension.
+- Explained how sound-effect volume and background music volume can be controlled.
+
+**Student Changes and Reasoning:**
+
+- Implemented the SoundManager class.
+- Loaded the required sound effects and background music.
+- Organized sound effects using a dictionary.
+- Connected player damage, hammer swings, game wins, game losses, and Ralph's actions to their corresponding sounds.
+- Implemented background music playback and stopping.
+- Added volume control for sound effects and background music.
+- Corrected the background music file path to match the actual MP3 file.
+
+**Tests/Validation:**
+
+- Reviewed audio file paths and event mappings.
+- Checked the sound-loading and playback methods.
+- Reviewed background music control and volume settings.
+- Checked the relationship between custom events and SoundManager.
+
+**Final Result:**
+
+Implemented the SoundManager with event-based sound effects, background music management, and volume control.
+
+---
+
+# Additional Contributions
+
+## 8. Implementing the Losing State
+
+**Date and Time:** November 14, 2026
+
+**Task and Prompt Used:**
+
+Worked on implementing the losing screen using the existing game-state architecture and connecting it with the GameManager.
+
+**AI Suggestions:**
+
+- Explained the responsibilities of the different game-state methods.
+- Explained how `enter()`, `handle_events()`, `update()`, `draw()`, and `exit()` fit into the state-management structure.
+- Explained how `GameManager.change_state()` switches between different game states.
+- Suggested keeping the losing screen separate from the main gameplay logic.
+
+**Student Changes and Reasoning:**
+
+- Implemented `LoseState` using the existing game-state structure.
+- Connected the losing state with GameManager.
+- Integrated the losing state with the gameplay-ending conditions.
+
+**Tests/Validation:**
+
+- Reviewed the state transition logic.
+- Checked the connection between PlayingState and LoseState.
+- Reviewed the losing conditions.
+
+**Final Result:**
+
+Completed the losing state as an additional contribution to the project.
+
