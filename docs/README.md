@@ -119,7 +119,7 @@ fix-it-felix-pygame/
 **assets/ – Game Resources**
 
 - **audio/:** Contains background music and sound effects.
-- **images/:** Contains visual resources, including backgrounds, character sprites, game objects, and window images.
+- **images/:** Contains visual resources such as images for game objects, characters, and background.
 
 **docs/ – Documentation**
 
@@ -167,7 +167,7 @@ cd fix-it-felix-pygame
 **Step 3: Install the required dependency**
 
 ```bash
-pip install pygame
+pip install pygame-ce
 ```
 
 ## 7. How to Run the Game
@@ -182,14 +182,14 @@ The game window should open, allowing you to start playing.
 
 ## 8. Game Controls
 
-Refer to the in-game instructions for the available controls.
+You can also refer to the in-game instructions for the available controls in the menu screen.
 
 | Control | Action |
 |---|---|
-| Arrow Keys or WASD | Character movement |
-| Space | Fix broken windows |
-| Mouseclick Start button | Start the game |
-| ESC or Mouseclick Quit Button | Exit the game |
+| Arrow Keys or WASD | Character movement during gameplay |
+| Left Mouse-click on Start button or Press Space or Enter | Start the game |
+| Space (x3 times) | Fix broken windows |
+| Left Mouse-click on Quit Button or Press ESC | Exit the game | 
 
 ## 9. Development Team
 
@@ -199,7 +199,7 @@ This project was developed collaboratively as part of an Object-Oriented Program
 |---|---|
 | Thant Htut Aung | Felix, Bricks, Sound, and Win/Lose screen |
 | Lin Lat Eain | Game Flow, Management, Ralph |
-| Soe Yu Nandar | Building, Windows, Menu, Game State |
+| Soe Yu Nandar | Building, Windows, Menu, Images, and Game State |
 
 ## 10. Future Improvements
 
@@ -212,7 +212,7 @@ This project was developed collaboratively as part of an Object-Oriented Program
 
 We would like to acknowledge the original creators and sources of the visual and audio assets used in this project.
 
-### Character Images and Sprites
+### Images
 
 | Asset | Source |
 |---|---|
@@ -237,7 +237,7 @@ We would like to acknowledge the original creators and sources of the visual and
 
 ### AI Assistance
 
-- **ChatGPT (OpenAI)** – Used to assist with development, debugging, code explanations, and documentation. Detailed records of AI assistance are provided in `AI_LOG.md`.
+- **ChatGPT (OpenAI) & Claude** – Used to assist with development, debugging, code explanations, and documentation. Detailed records of AI assistance are provided in `AI_LOG.md`.
 
 *All third-party assets remain the property of their respective creators and are acknowledged here for attribution purposes.*
 ---
