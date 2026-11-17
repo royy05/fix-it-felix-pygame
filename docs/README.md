@@ -220,6 +220,12 @@ We would like to acknowledge the original creators and sources of the visual and
 | Ralph Throw | [Villains Wiki – Wreck-It Ralph (Arcade Game)](https://villains.fandom.com/wiki/Wreck-It_Ralph_(Arcade_Game)) |
 | Felix Idle | [Pixilart – Fix-It Felix Jr.](https://www.pixilart.com/art/fix-it-felix-jr-f0b006efc5e3) |
 | Felix Hurt | Generated using ChatGPT (OpenAI) |
+| Background | Generated using Claude |
+| Window_fixed | Generated using Claude |
+| Window_broken | Generated using Claude |
+| Roof | Generated using Claude |
+| Brick | Generated using Claude |
+| Building_wall | Generated using Claude |
 
 ### Sound Effects and Music
 
