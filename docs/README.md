@@ -43,7 +43,6 @@ fix-it-felix-pygame/
 ├── AI_LOG.md
 │
 ├── entities/
-│   ├── __init__.py
 │   ├── game_object.py
 │   ├── player.py
 │   ├── ralph.py
