@@ -128,7 +128,7 @@ class MenuState(GameState):
         )
         
         title2 = self._title_font.render(
-            "FELIX", True, (90, 170, 255)
+            "FELIX JR.", True, (90, 170, 255)
         )
         
         screen.blit(
