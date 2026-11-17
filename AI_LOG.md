@@ -254,7 +254,7 @@ The following details are recorded.
 ##  1: Ralph Class Design and Introduction Logic
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's introduction and random window destruction.
 
 **Prompt Used:**
@@ -285,7 +285,7 @@ Completed the random window selection and window destruction request logic.
 ##  2: Ralph Climbing Movement
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's movement between selected windows.
 
 **Prompt Used:**
@@ -315,7 +315,7 @@ Completed the basic climbing movement and target-arrival logic.
 ##  3: Ralph Introduction Completion
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing the transition after Ralph finishes destroying windows.
 
 **Prompt Used:**
@@ -342,7 +342,7 @@ Completed the initial introduction-ending method. Rooftop positioning remains pe
 ##  4: Brick Creation and Ralph Debris Integration
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's debris creation method.
 
 **Prompt Used:**
@@ -374,7 +374,7 @@ Completed Ralph's `drop_debris()` method. The `attack()` method and integration 
 ##  5: Configuration Compatibility Review
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Reviewing and updating shared configuration variables.
 
 **Prompt Used:**
@@ -405,7 +405,7 @@ Identified configuration compatibility requirements and agreed on the updated na
 ##  6: GitHub Collaboration Setup
 
 **Date:** 13 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Setting up GitHub collaboration and an individual development branch.
 
 **Prompt Used:**
@@ -435,7 +435,7 @@ Successfully configured a personal development branch for independent coding and
 ##  7: Ralph Rooftop Patrol Movement
 
 **Date:** 14 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's rooftop positioning and continuous patrol movement.
 
 **Prompt Used:**  
@@ -468,7 +468,7 @@ Completed Ralph's rooftop positioning and horizontal patrol movement, including 
 ##  8: Implementing Ralph's Attack Cycle and Difficulty-Based Timing
 
 **Date:** 14 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's repeated attack cycle and connecting attack timing to difficulty settings.
 
 **Prompt Used:**  
@@ -505,7 +505,7 @@ Implemented Ralph's repeated movement and attack cycle, allowing his attack freq
 ##  9: Implementing Random Brick Generation and Returning Bricks
 
 **Date:** 14 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Implementing Ralph's attack method and allowing newly generated Brick objects to be received by PlayingState.
 
 **Prompt Used:**  
@@ -539,7 +539,7 @@ Completed Ralph's random brick generation and return mechanism. Newly created Br
 ##  10: Planning Ralph and Entity Integration with PlayingState
 
 **Date:** 14 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Task:** Reviewing the PlayingState structure and planning the integration of Ralph, Building, Player and Brick objects.
 
 **Prompt Used:**  
@@ -570,7 +570,7 @@ Established an implementation sequence for integrating Ralph's completed core lo
 ##  11: Implementing Window Repair Tracking in Building
 
 **Date:** 15 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Topic:** OOP Encapsulation, Window State Management and Repair Tracking  
 **Task:** Implementing window repair tracking in Building to determine when Felix has repaired all windows broken by Ralph.
 
@@ -605,7 +605,7 @@ The Building class can now track the windows originally broken by Ralph, count t
 ##  12: Implementing Gameplay HUD in PlayingState
 
 **Date:** 15 November 2026  
-**Team Member:** Member 3 – Lin Lat Eain  
+ 
 **Topic:** Pygame Text Rendering and HUD Implementation  
 **Task:** Implementing a basic HUD to display the remaining game time, Felix's lives and window repair progress.
 
